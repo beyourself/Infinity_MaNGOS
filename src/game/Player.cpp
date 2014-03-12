@@ -18459,10 +18459,6 @@ void Player::_SaveTalents()
 // real stats will be recalculated on player login
 void Player::_SaveStats()
 {
-    // check if stat saving is enabled and if char level is high enough
-    if (!sWorld.getConfig(CONFIG_UINT32_MIN_LEVEL_STAT_SAVE) || getLevel() < sWorld.getConfig(CONFIG_UINT32_MIN_LEVEL_STAT_SAVE))
-        return;
-
     static SqlStatementID delStats ;
     static SqlStatementID insertStats ;
 
