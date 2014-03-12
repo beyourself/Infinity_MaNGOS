@@ -1,0 +1,17 @@
+		BODY	  { margin: 0px; }
+		A:link    { color: #FFB019; font-weight: bold; }
+		A:active  { color: #FFB019; font-weight: bold; }
+		A:visited { color: #B1B1B1; font-weight: bold; }
+		A:hover   { color: white;   font-weight: bold; }
+		span.grey { font-family: Arial,Helvetica,Sans-Serif; color: #A0A1A3; font-size: 9pt; }
+		span	  { font-family: Arial,Helvetica,Sans-Serif; color: #CCCCCC; font-size: 9pt; }
+		span.lite { font-family: Arial,Helvetica,Sans-Serif; color: #F0E7BE; font-size: 9pt; }
+		small	  { font-family: Arial,Helvetica,Sans-Serif; color: #D7CEA4; font-size: 8pt; }
+		small.gold{ font-family: Arial,Helvetica,Sans-Serif; color: #C4C4C4; font-size: 8pt; }
+		B		  { color: #E2D9B0; font-weight: bold; }
+		B.white   { color: #ffffff; font-weight: bold; }
+		span.red  { color: red; }
+		#header        { COLOR: white; FONT-WEIGHT: bold; FONT-VARIANT: small-caps; TEXT-DECORATION: none; LETTER-SPACING: 4px;}
+		span.blue		{ font-family: Arial,Helvetica,Sans-Serif; color:#00C0FF; font-size: 10pt; }
+		span.mvp		{ font-family: Arial,Helvetica,Sans-Serif; color:#A7BFD8; font-size: 10pt; }	
+		input.button 	{ background-color: transparent; border-style: none; }

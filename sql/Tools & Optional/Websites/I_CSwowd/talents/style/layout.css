@@ -1,0 +1,20 @@
+body { background: #000 url('images/page-bg.jpg') repeat-x center 0; color: #000; font-family: Arial, Helvetica, sans-serif;    font-size: 12px; padding: 0; margin: 0; }
+#hpWrapper { display: table-row; background: url('images/menu-bg.jpg') repeat-y 65px 0; }
+#nav{ width: 157px;  background: url('images/page-bg.jpg') repeat-x 0 0; position:relative; }
+#leftMenu { margin-top: 39px; position: relative; right: -11px; }
+#header, .logo-container, .logo-right, .gryph-container, .gryph-z, #main-nav { display: none; }
+#wow-logo { background: url('images/wowlogo-front.gif') no-repeat; position:relative; top:-3px; left:-28px;  width: 252; height: 103; }
+div.page-bg-top { background: url('images/page-bg-top.jpg') repeat; height: 88px; position: relative; width: 100%; }
+.statue-left { width: 243; height: 445; position: absolute; top: -445px; left: -243px; background-image: url('images/statue-left.jpg'); }
+#ne-top-left { background:transparent url('images/ne-top-left.gif') no-repeat scroll 0; height:40px; left:-122px; position:absolute; top:-50px; width:107px; }
+#ne-center { background:transparent url('images/ne-center.jpg') no-repeat scroll 0; height:548px; left:-827px; position:absolute; top:-11px; width:980px; }
+#ironFrame { display: block; height: 20px; background: black url('images/ironframe-bg.jpg') repeat-x top; position: relative; border: 0; width:100%; left: 0; z-index: 0; }
+#ironFrame { margin-top: -2px; }
+.blizz-logo  { position: absolute; bottom: 22px; left: 50%; margin-left: -47px; }
+#marginal { width: 226px; margin-left: -1px; }
+#main-bottom div { height: 41px; background: url('images/frame_bottom-left.jpg') no-repeat top left; }
+#main-bottom div div { height: 41px; background: url('images/frame_bottom-right.jpg') no-repeat top right; }
+#main-bottom { height: 41px; margin-bottom: -16px; width: auto; background: url('images/frame_bottom-bg.jpg') repeat-x 0 0; z-index: 100; }
+#copyright { display: block; position: relative; top: 75px; left: auto;	color: #8e8e8e; }
+img.blizzylogo  { background: url('images/bot-blizzlogo.gif'); height: 57; width: 97; }
+div div div#blizzlogo-bot { position: relative; display: block; text-align: center; top: -61px;	background: none; z-index: 500; }

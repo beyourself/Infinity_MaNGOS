@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes" encoding="utf-8" ?>
+<movie>    
+<featured>
+<item1 title="wrath_launch.swf" link="/wrath" />
+<item2 title="jinx_winter09.swf" link="/warcraft_winter_2009" />
+<item3 title="eow.swf" link="" />
+<item4 title="wow_mouse.swf" link="/partners_blizz" />
+<item5 title="wow_keyboard.swf" link="/partners_blizz" />
+</featured>
+</movie>

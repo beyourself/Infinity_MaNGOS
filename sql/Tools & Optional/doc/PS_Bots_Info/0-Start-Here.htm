@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0029)http://ike3.github.io/mangos/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>ike3/mangos @ GitHub</title>
+	<link rel="stylesheet" type="text/css" href="./ike3 mangos @ GitHub_files/style.css">
+	<style>
+.news .group {
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.news .group:first-child {
+	margin-top: 0px;
+}
+
+.news .row {
+	margin-left: 10px;
+	clear: both;
+}
+
+.news .row .line {
+	float: left;
+	margin-right: 10px;
+}
+
+.news .row .date {
+}	
+	</style>
+	<script language="javascript" type="text/javascript" src="./ike3 mangos @ GitHub_files/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="./ike3 mangos @ GitHub_files/jquery-jtemplates.js"></script>
+	<script language="javascript" type="text/javascript" src="./ike3 mangos @ GitHub_files/jquery.dateFormat-1.0.js"></script>
+	<script language="javascript" type="text/javascript" src="./ike3 mangos @ GitHub_files/script"></script>
+	<script language="javascript" type="text/javascript">
+		$().ready(function() {
+			$("#news").setTemplate($("#reportTableRowTemplate").html());
+			$("#news").processTemplate(repoNews);
+		});
+	</script>
+</head>
+
+<body>
+  <a href="http://github.com/ike3/mangos"><img style="position: absolute; top: 0; right: 0; border: 0;" src="./ike3 mangos @ GitHub_files/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/ike3/mangos/zipball/ai">
+        <img border="0" width="90" src="./ike3 mangos @ GitHub_files/zip.png"></a>
+      <a href="http://github.com/ike3/mangos/tarball/ai">
+        <img border="0" width="90" src="./ike3 mangos @ GitHub_files/tar.png"></a>
+    </div>
+
+    <h1><a href="http://ike3.github.com/mangos/">AI Playerbot</a>
+      <span class="small">by <a href="http://github.com/ike3">ike3</a></span></h1>
+
+    <div class="description">
+      This is a fork of playerbot with completely different AI based on strategies.
+    </div>
+	
+<p>
+Welcome to the AI Playerbot project! This is a modification of <a href="http://getmangos.com/">MaNGOS</a> server which brings a number of bots online and available for any player. Also allows you to use your account/guild characters as bots. This includes:
+</p><ul>
+<li>Easy bot control using chat commands</li>
+<li>About 100 bots online spread around the world at any time waiting for your invitation</li>
+<li>More than 100 chat commands to interact with the bots</li>
+<li>More than 30 strategies to choose from</li>
+<li>Improved auction house bot</li>
+<li>Structured and maintainable source code.</li>
+</ul>
+<p></p>
+
+<p>
+This makes it possible the use cases below:
+</p><ul>
+<li>Inviting bots to party and playing dungeon, raid or doing some PvP</li>
+<li>Summoning your alts as bots to quick item exchange, casting some spells, buffing, leveling, etc.</li>
+<li>Random PVP with bots of opposite faction or dueling with bots from your faction</li>
+<li>Trading and auctioning</li>
+<li>Making World of Warcraft completely a single-player game!</li>
+</ul>
+<p></p>
+
+<p>
+This project is an alternative for <a href="https://github.com/playerbot/mangos">Blueboy's playerbot</a> (actually AI Playerbot was forked from it but the codebase is now almost fully rewritten and incompatible with the original version). 
+</p>
+
+<h2>Download</h2>
+<p>
+  You can download this project in either
+  <a href="http://github.com/ike3/mangos/zipball/ai">zip</a> or
+  <a href="http://github.com/ike3/mangos/tarball/ai">tar</a> formats. You can also clone the project with <a href="http://git-scm.com/">Git</a>
+  by running:
+  </p><pre>$ git clone git://github.com/ike3/mangos</pre>
+<p></p>
+
+<h2>Documentation</h2>
+<a href="http://ike3.github.io/mangos/doc/playerbot/QuickStart.html">Quick Start Guide</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/GettingStarted.html">Basics</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/ControllingBots.html">How to control bots</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Movement.html">Movement</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Attacking.html">Attacking</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Looting.html">Looting</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Interacting.html">Interacting</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/ItemsAndTrading.html">Items and Trade</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Commands.html">Command Reference</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/RandomBots.html">Random Bots</a>
+<br>
+<a href="http://ike3.github.io/mangos/doc/playerbot/Ahbot.html">Auction House Bot</a>
+<br>
+
+<h2>News</h2>
+<div id="news" class="news"><div class="group"></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-19] reduce core changes</div></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-18] vs files improvements</div></div><div class="group"></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-16] interrupt enemy healers</div></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-15] use spellDistance in has totem value</div></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-13] respect follow angle in homebind</div></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-12] increase default ranges</div></div><div class="row">	<div class="line"><span class="date"><sup>th</sup> </span> - [ai-0.36-11] disable meeting stone during combat</div></div></div>
+<div style="display: none" id="reportTableRowTemplate">
+{#foreach $T as group}
+<div class="group">{$.format.date(new Date($T.group.date), "MMM yyyy")}</div>
+{#foreach $T.group.items as item}
+<div class="row">
+	<div class="line"><span class="date">{$.format.date(new Date($T.item.commitTime), "dd")}<sup>th</sup> {$.format.date(new Date($T.item.commitTime), "HH:mm")}</span> - {$T.item.shortText}</div>
+</div>
+{#/for}
+{#/for}
+</div>
+
+<br>
+
+<h2>Support</h2>
+<p>
+AI Playerbot is known to be working on the following mangos versions:
+</p><ul>
+<li><b>MaNGOS R2 (main branch)</b></li>
+<li>MaNGOS Zero</li>
+<li>MaNGOS One</li>
+<li>MaNGOS Two</li>
+<li>CMaNGOS</li>
+</ul>
+There are separate branches on GitHub for each version. New features are being developed on R2 branch until a release is done. Then the release is ported to other versions.
+<p></p>
+<p>
+Please post to <a href="http://getmangos.com/bb/topic/130/ai-playerbot/">this forum thread</a>.
+</p>
+
+<h2>Thanks</h2>
+<p>
+I wish to thank the creators of
+</p><ul>
+<li>MaNGOS</li>
+<li>ScriptDev2</li>
+<li>World database maintainers (udb, ytdb, etc.)</li>
+<li>Ahbot</li>
+<li>original Playerbot</li>
+<li>and everybody else related to mangos project</li>
+</ul>
+
+You did awesome job!	
+<p></p>
+
+<h2>Licensing and disclaimer</h2>
+<p>
+The main goal of this project is learning. AI Playerbot is availabe under the same license terms as original <a href="http://getmangos.com/">MaNGOS</a> project.
+<br>
+Author maintains this only for his own interest in his free time so please do not expect much :)
+</p>
+	
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/ike3/mangos">ike3/mangos</a>
+    </div>
+
+  </div>
+
+  
+
+
+</body></html>

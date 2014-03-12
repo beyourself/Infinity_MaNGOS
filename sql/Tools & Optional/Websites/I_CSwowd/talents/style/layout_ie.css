@@ -1,0 +1,13 @@
+/* 
+World of Warcraft -  Wrath of the Lich King [IE FIX]
+*/
+
+#hpWrapper { display: table-row; background: url('images/menu-bg.jpg') repeat-y 65px 0; }
+#ne-top-left { background:transparent url('images/ne-top-left.gif') no-repeat scroll 0; height:40px; left:-122px; position:absolute; top:-15px; width:107px; }
+#ne-center { background:transparent url('images/ne-center.jpg') no-repeat scroll 0; height:548px; left:-827px; position:absolute; top:25px; width:980px; }
+#nav{ width: 157px;  background: url('images/page-bg.jpg') repeat-x 0 0; position:relative; }
+#wow-logo { background: url('images/wowlogo-front.gif') no-repeat; position:relative; top:-3px; left:-24px;  width: 252; height: 103; }
+#ironFrame { margin-top: 15px; margin-bottom: 20;}
+#marginal { width: 226px; margin-left: -1px; }
+#copyright { display: block; position: relative; top: 75px; left: auto;	color: #8e8e8e; z-index: 9999999;}
+div div div#blizzlogo-bot { position: relative; display: block; text-align: center; top: -62px; left: auto; background: none; z-index: 500; }

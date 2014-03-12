@@ -1,0 +1,13 @@
+paste this if the frost background disapears after svn update
+
+<style>
+<!--
+body {
+padding: 0;
+margin:0px;
+background: url(images/background.jpg) 50% 0 #114576 repeat-x; background-attachment: fixed; /*the path to your image*/
+background-repeat: repeat-x;
+background-color: #d8f2ff;
+}
+-->
+</style>
