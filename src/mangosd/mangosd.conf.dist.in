@@ -127,16 +127,6 @@ BindIP = "0.0.0.0"
 #        Player save interval (in milliseconds)
 #        Default: 900000 (15 min)
 #
-#    PlayerSave.Stats.MinLevel
-#        Minimum level for saving character stats for external usage in database
-#        Default: 0  (do not save character stats)
-#                 1+ (save stats for characters with level 1+)
-#
-#    PlayerSave.Stats.SaveOnlyOnLogout
-#        Enable/Disable saving of character stats only on logout
-#        Default: 1 (only save on logout)
-#                 0 (save on every player save)
-#
 #    vmap.enableLOS
 #    vmap.enableHeight
 #       Deprecated (always enable)
@@ -258,8 +248,6 @@ GridCleanUpDelay = 300000
 MapUpdateInterval = 100
 ChangeWeatherInterval = 600000
 PlayerSave.Interval = 900000
-PlayerSave.Stats.MinLevel = 0
-PlayerSave.Stats.SaveOnlyOnLogout = 1
 vmap.ignoreSpellIds = "7720"
 vmap.enableIndoorCheck = 1
 DetectPosCollision = 1
