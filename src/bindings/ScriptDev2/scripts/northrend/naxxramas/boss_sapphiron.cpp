@@ -22,6 +22,9 @@ SDCategory: Naxxramas
 EndScriptData */
 
 /* Additional comments:
+ * Bugged spells:   28560 (needs maxTarget = 1, Summon of 16474 implementation, TODO, 30s duration)
+ *                  28526 (needs ScriptEffect to cast 28522 onto random target)
+ *
  * Achievement-criteria check needs implementation
  *
  * Frost-Breath ability: the dummy spell 30101 is self cast, so it won't take the needed delay of ~7s until it reaches its target
@@ -207,7 +210,7 @@ struct MANGOS_DLL_DECL boss_sapphironAI : public ScriptedAI
                         m_Phase = PHASE_LIFT_OFF;
                         m_creature->InterruptNonMeleeSpells(false);
                         SetCombatMovement(false);
-                        m_creature->GetMotionMaster()->Clear();
+                        m_creature->GetMotionMaster()->Clear(false);
                         m_creature->GetMotionMaster()->MovePoint(1, aLiftOffPosition[0], aLiftOffPosition[1], aLiftOffPosition[2]);
                         // TODO This should clear the target, too
 
@@ -288,7 +291,7 @@ struct MANGOS_DLL_DECL boss_sapphironAI : public ScriptedAI
                     m_Phase = PHASE_GROUND;
 
                     SetCombatMovement(true);
-                    m_creature->GetMotionMaster()->Clear();
+                    m_creature->GetMotionMaster()->Clear(false);
                     m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
 
                     m_uiFlyTimer = 67000;
@@ -319,6 +322,25 @@ CreatureAI* GetAI_boss_sapphiron(Creature* pCreature)
     return new boss_sapphironAI(pCreature);
 }
 
+bool GOUse_go_sapphiron_birth(Player* pPlayer, GameObject* pGo)
+{
+    ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+    if (!pInstance)
+        return true;
+
+    if (pInstance->GetData(TYPE_SAPPHIRON) != NOT_STARTED)
+        return true;
+
+    // If already summoned return (safety check)
+    if (pInstance->GetSingleCreatureFromStorage(NPC_SAPPHIRON, true))
+        return true;
+
+    // Set data to special and allow the Go animation to proceed
+    pInstance->SetData(TYPE_SAPPHIRON, SPECIAL);
+    return false;
+}
+
 void AddSC_boss_sapphiron()
 {
     Script* pNewScript;
@@ -326,5 +348,10 @@ void AddSC_boss_sapphiron()
     pNewScript = new Script;
     pNewScript->Name = "boss_sapphiron";
     pNewScript->GetAI = &GetAI_boss_sapphiron;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "go_sapphiron_birth";
+    pNewScript->pGOUse = &GOUse_go_sapphiron_birth;
     pNewScript->RegisterSelf();
 }

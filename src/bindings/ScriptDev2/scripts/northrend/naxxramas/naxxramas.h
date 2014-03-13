@@ -61,20 +61,14 @@ enum
 
     TYPE_UNDYING_FAILED         = 15,                       // Achievements Undying and Immortal, needs to be saved to database
 
-    TYPE_MAX_HEIGAN_TRAPS_1     = 18,
-    TYPE_MAX_HEIGAN_TRAPS_2     = 19,
-    TYPE_MAX_HEIGAN_TRAPS_3     = 20,
-    TYPE_MAX_HEIGAN_TRAPS_4     = 21,
-
-    MAX_SPECIAL_ACHIEV_CRITS    = 7,
+    MAX_SPECIAL_ACHIEV_CRITS    = 6,
 
     TYPE_ACHIEV_SAFETY_DANCE    = 0,
     TYPE_ACHIEV_KNOCK_YOU_OUT   = 1,
     TYPE_ACHIEV_HUNDRED_CLUB    = 2,
-    TYPE_ACHIEV_AND_THEY        = 3,
-    TYPE_ACHIEV_SHOCKING        = 4,
-    TYPE_ACHIEV_SPORE_LOSER     = 5,
-    TYPE_ACHIEV_GET_ENOUGH      = 6,
+    TYPE_ACHIEV_SHOCKING        = 3,
+    TYPE_ACHIEV_SPORE_LOSER     = 4,
+    TYPE_ACHIEV_GET_ENOUGH      = 5,
 
     MAX_HEIGAN_TRAP_AREAS       = 4,
 
@@ -203,9 +197,6 @@ enum
     // Timed achievement criterias
     ACHIEV_START_PATCHWERK_ID   = 10286,
     ACHIEV_START_MAEXXNA_ID     = 9891,
-
-    // Achievement Spells
-    ACHIEV_SPELL_FOUR_HORSEMEN  = 59450,
 };
 
 struct GothTrigger
@@ -213,6 +204,8 @@ struct GothTrigger
     bool bIsRightSide;
     bool bIsAnchorHigh;
 };
+
+static const float aSapphPositions[4] = {3521.48f, -5234.87f, 137.626f, 4.53329f};
 
 class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 {
@@ -224,6 +217,7 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
         bool IsEncounterInProgress() const override;
 
+        void OnPlayerEnter(Player* pPlayer) override;
         void OnCreatureCreate(Creature* pCreature) override;
         void OnObjectCreate(GameObject* pGo) override;
 
@@ -250,9 +244,6 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         void GetGothSummonPointCreatures(std::list<Creature*>& lList, bool bRightSide);
         bool IsInRightSideGothArea(Unit* pUnit);
 
-        // Heigan
-        uint64 GetHeiganTrapData64(uint8 uiAreaIndex, uint32 uiIndex);
-
         // thaddius
         void GetThadTeslaCreatures(GuidList& lList) { lList = m_lThadTeslaCoilList; };
 
@@ -272,13 +263,13 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         UNORDERED_MAP<ObjectGuid, GothTrigger> m_mGothTriggerMap;
         GuidList m_alHeiganTrapGuids[MAX_HEIGAN_TRAP_AREAS];
 
-        std::vector<uint64> m_avuiHeiganTraps[MAX_HEIGAN_TRAP_AREAS];
-
         float m_fChamberCenterX;
         float m_fChamberCenterY;
         float m_fChamberCenterZ;
 
+        uint32 m_uiSapphSpawnTimer;
         uint32 m_uiTauntTimer;
+        uint32 m_uiHorsemenAchievTimer;
         uint8 m_uiHorseMenKilled;
 
         DialogueHelper m_dialogueHelper;

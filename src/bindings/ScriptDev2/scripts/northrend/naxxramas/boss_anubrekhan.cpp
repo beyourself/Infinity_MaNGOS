@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: Boss_Anubrekhan
-SD%Complete: 100
+SD%Complete: 95
 SDComment: Intro text usage is not very clear. Requires additional research.
 SDCategory: Naxxramas
 EndScriptData */
@@ -51,7 +51,6 @@ enum
     SPELL_SELF_SPAWN_5          = 29105,                    // This spawns 5 corpse scarabs ontop of us (most likely the pPlayer casts this on death)
     SPELL_SELF_SPAWN_10         = 28864,                    // This is used by the crypt guards when they die
 
-    NPC_CORPSE_SCARAB           = 16698,
     NPC_CRYPT_GUARD             = 16573
 };
 
@@ -77,7 +76,6 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
         m_introDialogue.InitializeDialogueHelper(m_pInstance);
         m_bHasTaunted = false;
         Reset();
-        SummonCryptGuards();
     }
 
     instance_naxxramas* m_pInstance;
@@ -89,33 +87,11 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
     uint32 m_uiSummonTimer;
     bool   m_bHasTaunted;
 
-    GuidList m_lSummonedGuidList;
-
     void Reset() override
     {
         m_uiImpaleTimer      = 15000;
-        m_uiLocustSwarmTimer = urand(70000, 120000);             // Random time between 70 seconds and 2 minutes for initial cast
-        m_uiSummonTimer      = m_bIsRegularMode ? 20000 : 0;     // spawn a guardian only after 20 seconds in normal mode; in heroic there are already 2 Guards spawned
-    }
-
-    void DespawnSummonedCreatures()
-    {
-        for (GuidList::const_iterator itr = m_lSummonedGuidList.begin(); itr != m_lSummonedGuidList.end(); ++itr)
-        {
-            if (Creature* pSummoned = m_creature->GetMap()->GetCreature(*itr))
-                pSummoned->ForcedDespawn();
-        }
-        m_lSummonedGuidList.clear();
-    }
-
-    void SummonCryptGuards() // Only 25Players
-    {
-        if (m_bIsRegularMode)
-            return;
-        if (Creature* pSummoned = m_creature->SummonCreature(NPC_CRYPT_GUARD, 3301.05f, -3503.52f, 287.078f, 2.33316f, TEMPSUMMON_DEAD_DESPAWN, 0))
-            m_lSummonedGuidList.push_back(pSummoned->GetObjectGuid());
-        if (Creature* pSummoned = m_creature->SummonCreature(NPC_CRYPT_GUARD, 3301.42f, -3448.52f, 287.078f, 3.92752f, TEMPSUMMON_DEAD_DESPAWN, 0))
-            m_lSummonedGuidList.push_back(pSummoned->GetObjectGuid());
+        m_uiLocustSwarmTimer = 90000;
+        m_uiSummonTimer      = m_bIsRegularMode ? 20000 : 0;// spawn a guardian only after 20 seconds in normal mode; in heroic there are already 2 Guards spawned
     }
 
     void KilledUnit(Unit* pVictim) override
@@ -130,30 +106,6 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
         DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned) override
-    {
-        if (!m_pInstance || m_pInstance->GetData(TYPE_ANUB_REKHAN) != IN_PROGRESS)
-            return;
-
-        if (pSummoned->GetEntry() == NPC_CRYPT_GUARD)
-            pSummoned->CastSpell(pSummoned, SPELL_SELF_SPAWN_10, true, NULL, NULL, m_creature->GetObjectGuid());
-    }
-
-    void JustSummoned(Creature* pSummoned) override
-    {
-        switch(pSummoned->GetEntry())
-        {
-            case NPC_CRYPT_GUARD:
-                if (m_creature->isInCombat())
-                    DoScriptText(EMOTE_CRYPT_GUARD, pSummoned);
-            case NPC_CORPSE_SCARAB:
-                m_lSummonedGuidList.push_back(pSummoned->GetObjectGuid());
-                if (m_creature->isInCombat())
-                    pSummoned->SetInCombatWithZone();
-                break;
-        }
-    }
-
     void Aggro(Unit* /*pWho*/) override
     {
         switch (urand(0, 2))
@@ -165,29 +117,18 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANUB_REKHAN, IN_PROGRESS);
-
-        for (GuidList::const_iterator itr = m_lSummonedGuidList.begin(); itr != m_lSummonedGuidList.end(); ++itr)
-        {
-            if (Creature* pSummoned = m_creature->GetMap()->GetCreature(*itr))
-                pSummoned->SetInCombatWithZone();
-        }
     }
 
     void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANUB_REKHAN, DONE);
-
-        m_lSummonedGuidList.clear();
     }
 
     void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANUB_REKHAN, FAIL);
-
-        DespawnSummonedCreatures();
-        SummonCryptGuards();
     }
 
     void MoveInLineOfSight(Unit* pWho) override
@@ -199,6 +140,28 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
         }
 
         ScriptedAI::MoveInLineOfSight(pWho);
+    }
+
+    void JustSummoned(Creature* pSummoned) override
+    {
+        if (pSummoned->GetEntry() == NPC_CRYPT_GUARD)
+            DoScriptText(EMOTE_CRYPT_GUARD, pSummoned);
+
+        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+            pSummoned->AI()->AttackStart(pTarget);
+    }
+
+    void SummonedCreatureDespawn(Creature* pSummoned) override
+    {
+        // If creature despawns on out of combat, skip this
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (pSummoned->GetEntry() == NPC_CRYPT_GUARD)
+        {
+            pSummoned->CastSpell(pSummoned, SPELL_SELF_SPAWN_10, true, NULL, NULL, m_creature->GetObjectGuid());
+            DoScriptText(EMOTE_CORPSE_SCARABS, pSummoned);
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -215,7 +178,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             // Do NOT cast it when we are afflicted by locust swarm
             if (!m_creature->HasAura(SPELL_LOCUSTSWARM) && !m_creature->HasAura(SPELL_LOCUSTSWARM_H))
             {
-                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H, SELECT_FLAG_PLAYER))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
             }
 
@@ -232,8 +195,8 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
                 DoScriptText(EMOTE_INSECT_SWARM, m_creature);
 
                 // Summon a crypt guard
-                m_uiSummonTimer = m_bIsRegularMode ? 16000 : 20000;
-                m_uiLocustSwarmTimer = urand(70000, 120000);
+                m_uiSummonTimer = 3000;
+                m_uiLocustSwarmTimer = 100000;
             }
         }
         else
@@ -245,7 +208,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             if (m_uiSummonTimer <= uiDiff)
             {
                 // Workaround for the not existing spell
-                m_creature->SummonCreature(NPC_CRYPT_GUARD, aCryptGuardLoc[0], aCryptGuardLoc[1], aCryptGuardLoc[2], aCryptGuardLoc[3], TEMPSUMMON_DEAD_DESPAWN, 0);
+                m_creature->SummonCreature(NPC_CRYPT_GUARD, aCryptGuardLoc[0], aCryptGuardLoc[1], aCryptGuardLoc[2], aCryptGuardLoc[3], TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 30000);
                 m_uiSummonTimer = 0;
             }
             else

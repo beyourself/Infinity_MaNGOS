@@ -48,7 +48,9 @@ instance_naxxramas::instance_naxxramas(Map* pMap) : ScriptedInstance(pMap),
     m_fChamberCenterX(0.0f),
     m_fChamberCenterY(0.0f),
     m_fChamberCenterZ(0.0f),
+    m_uiSapphSpawnTimer(0),
     m_uiTauntTimer(0),
+    m_uiHorsemenAchievTimer(0),
     m_uiHorseMenKilled(0),
     m_dialogueHelper(aNaxxDialogue)
 {
@@ -63,6 +65,19 @@ void instance_naxxramas::Initialize()
         m_abAchievCriteria[i] = false;
 
     m_dialogueHelper.InitializeDialogueHelper(this, true);
+}
+
+void instance_naxxramas::OnPlayerEnter(Player* pPlayer)
+{
+    // Function only used to summon Sapphiron in case of server reload
+    if (GetData(TYPE_SAPPHIRON) != SPECIAL)
+        return;
+
+    // Check if already summoned
+    if (GetSingleCreatureFromStorage(NPC_SAPPHIRON, true))
+        return;
+
+    pPlayer->SummonCreature(NPC_SAPPHIRON, aSapphPositions[0], aSapphPositions[1], aSapphPositions[2], aSapphPositions[3], TEMPSUMMON_DEAD_DESPAWN, 0);
 }
 
 void instance_naxxramas::OnCreatureCreate(Creature* pCreature)
@@ -373,13 +388,17 @@ void instance_naxxramas::SetData(uint32 uiType, uint32 uiData)
 
             if (uiData == SPECIAL)
             {
+                // Start the achiev countdown
+                if (!m_uiHorseMenKilled)
+                    m_uiHorsemenAchievTimer = 15000;
+
                 ++m_uiHorseMenKilled;
 
                 if (m_uiHorseMenKilled == 4)
                     SetData(TYPE_FOUR_HORSEMEN, DONE);
 
                 // Don't store special data
-                break;
+                return;
             }
             else if (uiData == FAIL)
                 m_uiHorseMenKilled = 0;
@@ -443,6 +462,9 @@ void instance_naxxramas::SetData(uint32 uiType, uint32 uiData)
                 DoUseDoorOrButton(GO_KELTHUZAD_WATERFALL_DOOR);
                 m_dialogueHelper.StartNextDialogueText(NPC_KELTHUZAD);
             }
+            // Start Sapph summoning process
+            if (uiData == SPECIAL)
+                m_uiSapphSpawnTimer = 22000;
             break;
         case TYPE_KELTHUZAD:
             m_auiEncounter[uiType] = uiData;
@@ -455,7 +477,7 @@ void instance_naxxramas::SetData(uint32 uiType, uint32 uiData)
             break;
     }
 
-    if (uiData == DONE)
+    if (uiData == DONE || (uiData == SPECIAL && uiType == TYPE_SAPPHIRON))
     {
         OUT_SAVE_INST_DATA;
 
@@ -503,14 +525,6 @@ uint32 instance_naxxramas::GetData(uint32 uiType) const
     if (uiType < MAX_ENCOUNTER)
         return m_auiEncounter[uiType];
 
-    switch(uiType)
-    {
-        // Number of Heigan traps per area
-        case TYPE_MAX_HEIGAN_TRAPS_1:   return m_avuiHeiganTraps[0].size();
-        case TYPE_MAX_HEIGAN_TRAPS_2:   return m_avuiHeiganTraps[1].size();
-        case TYPE_MAX_HEIGAN_TRAPS_3:   return m_avuiHeiganTraps[2].size();
-        case TYPE_MAX_HEIGAN_TRAPS_4:   return m_avuiHeiganTraps[3].size();
-    }
     return 0;
 }
 
@@ -533,9 +547,6 @@ bool instance_naxxramas::CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Playe
         case ACHIEV_CRIT_HUNDRED_CLUB_N:
         case ACHIEV_CRIT_HUNDRED_CLUB_H:
             return m_abAchievCriteria[TYPE_ACHIEV_HUNDRED_CLUB];
-        case ACHIEV_CRIT_TOGETHER_N:
-        case ACHIEV_CRIT_TOGETHER_H:
-            return m_abAchievCriteria[TYPE_ACHIEV_AND_THEY];
         case ACHIEV_CRIT_SHOCKING_N:
         case ACHIEV_CRIT_SHOCKING_H:
             return m_abAchievCriteria[TYPE_ACHIEV_SHOCKING];
@@ -545,6 +556,9 @@ bool instance_naxxramas::CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Playe
         case ACHIEV_CRIT_GET_ENOUGH_N:
         case ACHIEV_CRIT_GET_ENOUGH_H:
             return m_abAchievCriteria[TYPE_ACHIEV_GET_ENOUGH];
+        case ACHIEV_CRIT_TOGETHER_N:
+        case ACHIEV_CRIT_TOGETHER_H:
+            return m_uiHorsemenAchievTimer > 0;
             // 'The Immortal'(25m) or 'Undying'(10m) - (achievs 2186, 2187)
         case ACHIEV_CRIT_IMMORTAL_KEL:
         case ACHIEV_CRIT_IMMOORTAL_LOA:
@@ -581,6 +595,27 @@ void instance_naxxramas::Update(uint32 uiDiff)
         }
         else
             m_uiTauntTimer -= uiDiff;
+    }
+
+    if (m_uiHorsemenAchievTimer)
+    {
+        if (m_uiHorsemenAchievTimer <= uiDiff)
+            m_uiHorsemenAchievTimer = 0;
+        else
+            m_uiHorsemenAchievTimer -= uiDiff;
+    }
+
+    if (m_uiSapphSpawnTimer)
+    {
+        if (m_uiSapphSpawnTimer <= uiDiff)
+        {
+            if (Player* pPlayer = GetPlayerInMap())
+                pPlayer->SummonCreature(NPC_SAPPHIRON, aSapphPositions[0], aSapphPositions[1], aSapphPositions[2], aSapphPositions[3], TEMPSUMMON_DEAD_DESPAWN, 0);
+
+            m_uiSapphSpawnTimer = 0;
+        }
+        else
+            m_uiSapphSpawnTimer -= uiDiff;
     }
 
     m_dialogueHelper.DialogueUpdate(uiDiff);
