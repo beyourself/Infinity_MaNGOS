@@ -70,7 +70,7 @@ struct MANGOS_DLL_DECL npc_kittenAI : public FollowerAI
 
     uint32 m_uiMoonwellCooldown;
 
-    void Reset() { }
+    void Reset() override { }
 
     void MoveInLineOfSight(Unit* pWho) override
     {
@@ -187,7 +187,7 @@ struct MANGOS_DLL_DECL npc_niby_the_almightyAI : public ScriptedAI
 
     bool m_bEventStarted;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSummonTimer = 500;
         m_uiSpeech = 0;
@@ -301,7 +301,7 @@ struct MANGOS_DLL_DECL npc_kroshiusAI : public ScriptedAI
 
     uint8 m_uiPhase;
 
-    void Reset()
+    void Reset() override
     {
         m_uiKnockBackTimer = urand(5000, 8000);
         m_playerGuid.Clear();

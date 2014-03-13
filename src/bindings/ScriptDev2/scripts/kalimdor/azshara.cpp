@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL npc_rizzle_sprysprocketAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 
     void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell) override
     {
@@ -218,7 +218,7 @@ struct MANGOS_DLL_DECL npc_depth_chargeAI : public ScriptedAI
             m_creature->CastSpell(pUnit, SPELL_TRAP, false);
     }
 
-    void Reset() { }
+    void Reset() override { }
 };
 
 CreatureAI* GetAI_npc_depth_charge(Creature* pCreature)
@@ -308,7 +308,7 @@ struct MANGOS_DLL_DECL mobs_spitelashesAI : public ScriptedAI
 
     UNORDERED_MAP<uint8, uint32> m_mSpellTimers;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMorphTimer = 0;
 

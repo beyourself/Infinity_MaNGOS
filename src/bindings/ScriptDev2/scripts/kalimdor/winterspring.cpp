@@ -154,7 +154,7 @@ struct MANGOS_DLL_DECL npc_ranshallaAI : public npc_escortAI, private DialogueHe
     ObjectGuid m_voiceEluneGuid;
     ObjectGuid m_altarGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDelayTimer = 0;
     }

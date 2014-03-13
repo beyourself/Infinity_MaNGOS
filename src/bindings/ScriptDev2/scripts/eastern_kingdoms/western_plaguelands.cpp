@@ -37,7 +37,7 @@ struct MANGOS_DLL_DECL npc_the_scourge_cauldronAI : public ScriptedAI
 {
     npc_the_scourge_cauldronAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
 
-    void Reset() {}
+    void Reset() override {}
 
     void DoDie()
     {
@@ -132,7 +132,7 @@ struct MANGOS_DLL_DECL npc_anchorite_truuenAI: public npc_escortAI
 
     ObjectGuid m_utherGhostGuid;
 
-    void Reset() { }
+    void Reset() override { }
 
     void ReceiveAIEvent(AIEventType eventType, Creature* /*pSender*/, Unit* pInvoker, uint32 uiMiscValue) override
     {

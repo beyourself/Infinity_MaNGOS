@@ -61,7 +61,7 @@ struct MANGOS_DLL_DECL mob_aquementasAI : public ScriptedAI
     uint32 m_uiFrostShockTimer;
     uint32 m_uiAquaJetTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSwitchFactionTimer  = 10000;
         m_uiAquaJetTimer        = 5000;
@@ -72,13 +72,10 @@ struct MANGOS_DLL_DECL mob_aquementasAI : public ScriptedAI
 
     void SendItem(Player* pReceiver)
     {
-        if (!pReceiver || !pReceiver->IsInWorld())
-            return;
-
         if (pReceiver->HasItemCount(ITEM_BOOK_AQUOR, 1) &&
                 pReceiver->HasItemCount(ITEM_SILVERY_CLAWS, 11) &&
                 pReceiver->HasItemCount(ITEM_IRONTREE_HEART, 1) &&
-                !pReceiver->HasItemCount(ITEM_SILVER_TOTEM, 1, true))
+                !pReceiver->HasItemCount(ITEM_SILVER_TOTEM, 1))
         {
             if (Item* pItem = pReceiver->StoreNewItemInInventorySlot(ITEM_SILVER_TOTEM, 1))
                 pReceiver->SendNewItem(pItem, 1, true, false);
@@ -87,8 +84,6 @@ struct MANGOS_DLL_DECL mob_aquementasAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        if (!pWho || !pWho->GetObjectGuid().IsPlayer())
-            return;
         DoScriptText(AGGRO_YELL_AQUE, m_creature, pWho);
 
         Player* pInvokedPlayer = pWho->GetCharmerOrOwnerPlayerOrPlayerItself();
@@ -218,7 +213,7 @@ struct MANGOS_DLL_DECL npc_custodian_of_timeAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 };
 
 CreatureAI* GetAI_npc_custodian_of_time(Creature* pCreature)
@@ -285,7 +280,7 @@ struct MANGOS_DLL_DECL npc_oox17tnAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 
     void Aggro(Unit* /*who*/) override
     {
@@ -417,7 +412,7 @@ struct MANGOS_DLL_DECL npc_toogaAI : public FollowerAI
 
     Unit* pTorta;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCheckSpeechTimer = 2500;
         m_uiPostEventTimer = 1000;

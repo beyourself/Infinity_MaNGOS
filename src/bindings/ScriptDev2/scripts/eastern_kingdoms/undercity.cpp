@@ -40,11 +40,6 @@ enum
     SPELL_HIGHBORNE_AURA        = 37090,
     SPELL_SYLVANAS_CAST         = 36568,
     SPELL_RIBBON_OF_SOULS       = 37099,
-    SPELL_BLACK_ARROW           = 59712,
-    SPELL_FADE                  = 20672,
-    SPELL_MULTI_SHOT            = 59713,
-    SPELL_SHOOT_SYLVANAS        = 59710,
-    SPELL_SUMMON_SKELETON       = 59711,
 
     NPC_HIGHBORNE_LAMENTER      = 21628,
     NPC_HIGHBORNE_BUNNY         = 21641,
@@ -69,13 +64,7 @@ struct MANGOS_DLL_DECL npc_lady_sylvanas_windrunnerAI : public ScriptedAI
     uint32 m_uiLamentEventTimer;
     uint32 m_uiSummonTimer;
 
-    uint32 m_uiBlackArrowTimer;
-    uint32 m_uiMultiShotTimer;
-    uint32 m_uiFadeTimer;
-    uint32 m_uiShootTimer;
-    uint32 m_uiSummonSkeletonTimer;
-
-    void Reset()
+    void Reset() override
     {
         m_uiLamentEventTimer = 0;
         m_uiSummonTimer = 0;
@@ -140,48 +129,6 @@ struct MANGOS_DLL_DECL npc_lady_sylvanas_windrunnerAI : public ScriptedAI
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-
-        if (m_uiBlackArrowTimer < uiDiff)
-        {
-            if (Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_BLACK_ARROW);
-            m_uiBlackArrowTimer = urand(15000, 25000);
-        }
-        else
-            m_uiBlackArrowTimer -= uiDiff;
-
-        if (m_uiMultiShotTimer < uiDiff)
-        {
-            DoCast(m_creature->getVictim(), SPELL_MULTI_SHOT);
-            m_uiMultiShotTimer = urand(11000, 14000);
-        }
-        else
-            m_uiMultiShotTimer -= uiDiff;
-
-        if (m_uiFadeTimer < uiDiff)
-        {
-            DoCast(m_creature, SPELL_FADE);
-            m_uiFadeTimer = urand(15000, 20000);
-        }
-        else
-            m_uiFadeTimer -= uiDiff;
-
-        if (m_uiShootTimer < uiDiff)
-        {
-            if (Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_SHOOT_SYLVANAS);
-            m_uiShootTimer = urand(6000, 9000);
-        }
-        else
-            m_uiShootTimer -= uiDiff;
-
-        if (m_uiSummonSkeletonTimer < uiDiff)
-        {
-            DoCast(m_creature, SPELL_SUMMON_SKELETON);
-            m_uiSummonSkeletonTimer = urand(17000, 23000);
-        }
-        else
-            m_uiSummonSkeletonTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

@@ -50,7 +50,7 @@ struct MANGOS_DLL_DECL boss_azuregosAI : public ScriptedAI
     uint32 m_uiCleaveTimer;
     bool m_bEnraged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiManaStormTimer  = urand(5000, 17000);
         m_uiChillTimer      = urand(10000, 30000);

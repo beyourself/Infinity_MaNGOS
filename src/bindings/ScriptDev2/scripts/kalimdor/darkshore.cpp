@@ -71,7 +71,7 @@ struct MANGOS_DLL_DECL npc_kerlonianAI : public FollowerAI
 
     uint32 m_uiFallAsleepTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFallAsleepTimer = urand(10000, 45000);
     }
@@ -274,7 +274,7 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 
     void Aggro(Unit* pWho) override
     {
@@ -326,7 +326,7 @@ struct MANGOS_DLL_DECL npc_threshwackonatorAI : public FollowerAI
 {
     npc_threshwackonatorAI(Creature* pCreature) : FollowerAI(pCreature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
     void MoveInLineOfSight(Unit* pWho) override
     {
@@ -427,7 +427,7 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
 
     uint32 m_uiQuestId;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
             m_uiQuestId = 0;
@@ -561,7 +561,7 @@ struct MANGOS_DLL_DECL npc_theryluneAI : public npc_escortAI
     npc_theryluneAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
 
-    void Reset() {}
+    void Reset() override {}
 
     void WaypointReached(uint32 uiPointId) override
     {

@@ -88,7 +88,7 @@ struct MANGOS_DLL_DECL npc_giltharesAI : public npc_escortAI
 {
     npc_giltharesAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() { }
+    void Reset() override { }
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -180,7 +180,7 @@ struct MANGOS_DLL_DECL npc_taskmaster_fizzuleAI : public ScriptedAI
     uint32 m_uiResetTimer;
     uint8 m_uiFlareCount;
 
-    void Reset()
+    void Reset() override
     {
         m_uiResetTimer = 0;
         m_uiFlareCount = 0;
@@ -300,7 +300,7 @@ struct MANGOS_DLL_DECL npc_twiggy_flatheadAI : public ScriptedAI
     ObjectGuid m_bigWillGuid;
     GuidVector m_vAffrayChallengerGuidsVector;
 
-    void Reset()
+    void Reset() override
     {
         m_bIsEventInProgress = false;
 
@@ -447,12 +447,7 @@ CreatureAI* GetAI_npc_twiggy_flathead(Creature* pCreature)
 
 bool AreaTrigger_at_twiggy_flathead(Player* pPlayer, AreaTriggerEntry const* /*pAt*/)
 {
-    if (pPlayer->GetQuestStatus(QUEST_AFFRAY) == QUEST_STATUS_FAILED)
-    {
-        //we don't want player to start event if failed already.
-        return true;
-    }
-    else if (pPlayer->isAlive() && !pPlayer->isGameMaster() && pPlayer->GetQuestStatus(QUEST_AFFRAY) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->isAlive() && !pPlayer->isGameMaster() && pPlayer->GetQuestStatus(QUEST_AFFRAY) == QUEST_STATUS_INCOMPLETE)
     {
         Creature* pCreature = GetClosestCreatureWithEntry(pPlayer, NPC_TWIGGY, 30.0f);
         if (!pCreature)
@@ -504,7 +499,7 @@ struct MANGOS_DLL_DECL npc_wizzlecranks_shredderAI : public npc_escortAI
     uint32 m_uiPostEventTimer;
     uint32 m_uiPostEventCount;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {

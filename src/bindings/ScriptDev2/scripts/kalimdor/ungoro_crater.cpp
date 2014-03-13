@@ -50,7 +50,7 @@ struct MANGOS_DLL_DECL npc_ame01AI : public npc_escortAI
 {
     npc_ame01AI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -157,7 +157,7 @@ struct MANGOS_DLL_DECL npc_ringoAI : public FollowerAI
 
     Unit* pSpraggle;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFaintTimer = urand(30000, 60000);
         m_uiEndEventProgress = 0;

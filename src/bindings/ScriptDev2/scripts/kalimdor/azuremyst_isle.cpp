@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -64,7 +63,7 @@ struct MANGOS_DLL_DECL npc_draenei_survivorAI : public ScriptedAI
 
     bool m_bCanSayHelp;
 
-    void Reset()
+    void Reset() override
     {
         m_casterGuid.Clear();
 
@@ -212,7 +211,7 @@ struct MANGOS_DLL_DECL npc_engineer_spark_overgrindAI : public ScriptedAI
 
     bool m_bIsTreeEvent;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetUInt32Value(UNIT_NPC_FLAGS, m_uiNpcFlags);
 
@@ -292,7 +291,7 @@ struct MANGOS_DLL_DECL npc_injured_draeneiAI : public ScriptedAI
 {
     npc_injured_draeneiAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
         m_creature->SetHealth(int(m_creature->GetMaxHealth()*.15));
@@ -364,7 +363,7 @@ struct MANGOS_DLL_DECL npc_magwinAI : public npc_escortAI
         DoScriptText(SAY_AGGRO, m_creature, pWho);
     }
 
-    void Reset() { }
+    void Reset() override { }
 };
 
 bool QuestAccept_npc_magwin(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
@@ -382,85 +381,6 @@ bool QuestAccept_npc_magwin(Player* pPlayer, Creature* pCreature, const Quest* p
 CreatureAI* GetAI_npc_magwinAI(Creature* pCreature)
 {
     return new npc_magwinAI(pCreature);
-}
-
-/*######
-## boss_prophet_velen
-######*/
-
-enum
-{
-    SPELL_HOLY_BLAST                = 59700,
-    SPELL_HOLY_NOVA                 = 59701,
-    SPELL_HOLY_SMITE                = 59703,
-    //SPELL_PRAYER_OF_HEALING         = 59698, //on friendly
-    SPELL_STAFF_STRIKE              = 33542,
-};
-
-struct MANGOS_DLL_DECL boss_prophet_velenAI : public ScriptedAI
-{
-    boss_prophet_velenAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
-
-    uint32 m_uiHolyBlastTimer;
-    uint32 m_uiHolyNovaTimer;
-    uint32 m_uiHolySmiteTimer;
-    uint32 m_uiStaffStrikeTimer;
-    //uint32 m_uiPrayerOfHealingTimer;
-
-    void Reset()
-    {
-        m_uiHolyBlastTimer      = 7000;
-        m_uiHolyNovaTimer       = 12000;
-        m_uiHolySmiteTimer      = 9000;
-        m_uiStaffStrikeTimer    = 5000;
-       //m_uiPrayerOfHealingTimer= 10000;
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return;
-
-        if (m_uiHolyBlastTimer < uiDiff)
-        {
-            Unit* pTarget = (m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0));
-                DoCast(pTarget, SPELL_HOLY_BLAST);
-            m_uiHolyBlastTimer = urand(7000, 11000);
-        }
-        else
-            m_uiHolyBlastTimer -= uiDiff;
-
-        if (m_uiHolyNovaTimer < uiDiff)
-        {
-            DoCast(m_creature, SPELL_HOLY_NOVA);
-            m_uiHolyNovaTimer = urand(12000, 17000);
-        }
-        else
-            m_uiHolyNovaTimer -= uiDiff;
-
-        if (m_uiHolySmiteTimer < uiDiff)
-        {
-            DoCast(m_creature->getVictim(), SPELL_HOLY_SMITE);
-            m_uiHolySmiteTimer = urand(8000, 12000);
-        }
-        else
-            m_uiHolySmiteTimer -= uiDiff;
-
-        if (m_uiStaffStrikeTimer < uiDiff)
-        {
-            DoCast(m_creature->getVictim(), SPELL_STAFF_STRIKE);
-            m_uiStaffStrikeTimer = urand(5000, 8000);
-        }
-        else
-            m_uiStaffStrikeTimer -= uiDiff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_boss_prophet_velen(Creature* pCreature)
-{
-    return new boss_prophet_velenAI(pCreature);
 }
 
 void AddSC_azuremyst_isle()
@@ -488,10 +408,5 @@ void AddSC_azuremyst_isle()
     pNewScript->Name = "npc_magwin";
     pNewScript->GetAI = &GetAI_npc_magwinAI;
     pNewScript->pQuestAcceptNPC = &QuestAccept_npc_magwin;
-    pNewScript->RegisterSelf();
-
-    pNewScript = new Script;
-    pNewScript->Name = "boss_prophet_velen";
-    pNewScript->GetAI = &GetAI_boss_prophet_velen;
     pNewScript->RegisterSelf();
 }

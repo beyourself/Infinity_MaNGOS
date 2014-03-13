@@ -54,7 +54,7 @@ struct MANGOS_DLL_DECL npc_lazy_peonAI : public ScriptedAI
     uint32 m_uiResetSleepTimer;                             // Time, until the npc stops harvesting lumber
     uint32 m_uiStopSleepingTimer;                           // Time, until the npcs (re)starts working on its own
 
-    void Reset()
+    void Reset() override
     {
         m_uiResetSleepTimer = 0;
         m_uiStopSleepingTimer = urand(90000, 120000);       // Sleeping aura has only 2min duration

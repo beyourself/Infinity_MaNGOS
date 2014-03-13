@@ -102,7 +102,7 @@ struct MANGOS_DLL_DECL npc_clintar_dw_spiritAI : public npc_escortAI
         DoScriptText(urand(0, 1) ? SAY_AGGRO_1 : SAY_AGGRO_2, m_creature);
     }
 
-    void Reset()
+    void Reset() override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
@@ -313,7 +313,7 @@ struct MANGOS_DLL_DECL npc_keeper_remulosAI : public npc_escortAI, private Dialo
 
     bool m_bIsFirstWave;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -648,7 +648,7 @@ struct MANGOS_DLL_DECL boss_eranikusAI : public ScriptedAI
     ObjectGuid m_tyrandeGuid;
     GuidList m_lPriestessList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiAcidBreathTimer         = 10000;
         m_uiNoxiousBreathTimer      = 3000;

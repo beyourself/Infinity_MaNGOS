@@ -53,7 +53,7 @@ struct MANGOS_DLL_DECL npc_kyle_the_frenziedAI : public ScriptedAI
     uint32 m_uiEventTimer;
     uint8 m_uiEventPhase;
 
-    void Reset()
+    void Reset() override
     {
         m_bEvent = false;
         m_bIsMovingToLunch = false;

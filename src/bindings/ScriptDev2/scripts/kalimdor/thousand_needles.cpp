@@ -50,7 +50,7 @@ struct MANGOS_DLL_DECL npc_kanatiAI : public npc_escortAI
 {
     npc_kanatiAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() { }
+    void Reset() override { }
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -130,7 +130,7 @@ struct MANGOS_DLL_DECL npc_lakota_windsongAI : public npc_escortAI
 {
     npc_lakota_windsongAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() { }
+    void Reset() override { }
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -207,7 +207,7 @@ struct MANGOS_DLL_DECL npc_paoka_swiftmountainAI : public npc_escortAI
 {
     npc_paoka_swiftmountainAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() { }
+    void Reset() override { }
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -277,7 +277,7 @@ struct MANGOS_DLL_DECL npc_plucky_johnsonAI : public ScriptedAI
 
     uint32 m_uiResetTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiResetTimer = 120000;
 

@@ -60,7 +60,7 @@ struct MANGOS_DLL_DECL npc_aged_dying_ancient_kodoAI : public ScriptedAI
 
     uint32 m_uiDespawnTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDespawnTimer = 0;
     }
@@ -181,7 +181,7 @@ struct MANGOS_DLL_DECL npc_dalinda_malemAI : public npc_escortAI
 {
     npc_dalinda_malemAI(Creature* m_creature) : npc_escortAI(m_creature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
     void JustStartedEscort() override
     {

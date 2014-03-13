@@ -94,7 +94,7 @@ struct MANGOS_DLL_DECL npc_muglashAI : public npc_escortAI
     uint32 m_uiWaveId;
     uint32 m_uiEventTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiEventTimer = 10000;
 
@@ -256,7 +256,7 @@ struct MANGOS_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
 {
     npc_ruul_snowhoofAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -333,7 +333,7 @@ struct MANGOS_DLL_DECL npc_torekAI : public npc_escortAI
     uint32 m_uiRend_Timer;
     uint32 m_uiThunderclap_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiRend_Timer = 5000;
         m_uiThunderclap_Timer = 8000;
@@ -476,7 +476,7 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
     uint8 m_uiCreaturesCount;
     bool m_bIsAttacked;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
