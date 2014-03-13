@@ -46,7 +46,9 @@ class MANGOS_DLL_DECL instance_obsidian_sanctum : public ScriptedInstance
         instance_obsidian_sanctum(Map* pMap);
 
         void Initialize() override;
+
         void OnCreatureCreate(Creature* pCreature) override;
+
         void SetData(uint32 uiType, uint32 uiData) override;
         uint32 GetData(uint32 uiType) const override;
 

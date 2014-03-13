@@ -493,7 +493,7 @@ class MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance, private Dialogu
 
         void SetSpecialAchievementCriteria(uint32 uiType, bool bIsMet);
         bool CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Player const* pSource, Unit const* pTarget, uint32 uiMiscValue1 /* = 0*/) const override;
-        bool CheckConditionCriteriaMeet(Player const* pPlayer, uint32 uiInstanceConditionId, WorldObject const* pConditionSource, uint32 conditionSourceType) const /*override*/ ;
+        bool CheckConditionCriteriaMeet(Player const* pPlayer, uint32 uiInstanceConditionId, WorldObject const* pConditionSource, ConditionSource conditionSourceType) const override;
 
         void DoSpawnThorimNpcs(Player* pSummoner);
         void DoProcessShatteredEvent();
