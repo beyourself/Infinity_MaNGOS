@@ -66,7 +66,7 @@ struct MANGOS_DLL_DECL boss_coren_direbrewAI : public ScriptedAI
     uint32 m_uiSummonTimer;
     uint8 m_uiPhase;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDisarmTimer     = 10000;
         m_uiChargeTimer     = 5000;
@@ -74,7 +74,7 @@ struct MANGOS_DLL_DECL boss_coren_direbrewAI : public ScriptedAI
         m_uiPhase           = 0;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         // Spawn 3 minions on aggro
         for (uint8 i = 0; i < MAX_DIREBREW_MINIONS; ++i)

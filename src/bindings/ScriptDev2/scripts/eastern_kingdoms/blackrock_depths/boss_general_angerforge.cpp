@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -44,7 +43,7 @@ struct MANGOS_DLL_DECL boss_general_angerforgeAI : public ScriptedAI
     uint32 m_uiAddsTimer;
     bool m_bSummonedMedics;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMightyBlowTimer = 8000;
         m_uiHamStringTimer = 12000;
@@ -57,7 +56,7 @@ struct MANGOS_DLL_DECL boss_general_angerforgeAI : public ScriptedAI
     {
         float fX, fY, fZ;
         m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 20.0f, fX, fY, fZ);
-        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 60000);
     }
 
     void JustSummoned(Creature* pSummoned) override

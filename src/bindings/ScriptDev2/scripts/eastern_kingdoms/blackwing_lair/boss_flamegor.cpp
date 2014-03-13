@@ -48,20 +48,20 @@ struct MANGOS_DLL_DECL boss_flamegorAI : public ScriptedAI
     uint32 m_uiWingBuffetTimer;
     uint32 m_uiFrenzyTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiShadowFlameTimer = 21000;                       // These times are probably wrong
         m_uiWingBuffetTimer = 35000;
         m_uiFrenzyTimer = 10000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FLAMEGOR, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FLAMEGOR, DONE);

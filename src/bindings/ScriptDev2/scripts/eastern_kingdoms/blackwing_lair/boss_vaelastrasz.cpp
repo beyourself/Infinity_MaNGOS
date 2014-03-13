@@ -85,7 +85,7 @@ struct MANGOS_DLL_DECL boss_vaelastraszAI : public ScriptedAI
     uint32 m_uiTailSweepTimer;
     bool m_bHasYelled;
 
-    void Reset()
+    void Reset() override
     {
         m_playerGuid.Clear();
 
@@ -137,7 +137,7 @@ struct MANGOS_DLL_DECL boss_vaelastraszAI : public ScriptedAI
         DoScriptText(SAY_KILLTARGET, m_creature, pVictim);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VAELASTRASZ, IN_PROGRESS);
@@ -146,7 +146,7 @@ struct MANGOS_DLL_DECL boss_vaelastraszAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, SPELL_ESSENCE_OF_THE_RED);
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VAELASTRASZ, DONE);
@@ -314,7 +314,7 @@ struct MANGOS_DLL_DECL boss_vaelastraszAI : public ScriptedAI
     }
 };
 
-bool GossipSelect_boss_vaelastrasz(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_boss_vaelastrasz(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {

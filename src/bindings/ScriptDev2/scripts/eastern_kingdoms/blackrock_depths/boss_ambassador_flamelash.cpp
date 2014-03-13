@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -42,7 +41,7 @@ struct MANGOS_DLL_DECL boss_ambassador_flamelashAI : public ScriptedAI
     int RandX;
     int RandY;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSpiritTimer = 12000;
     }
@@ -51,10 +50,10 @@ struct MANGOS_DLL_DECL boss_ambassador_flamelashAI : public ScriptedAI
     {
         float fX, fY, fZ;
         m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 30.0f, fX, fY, fZ);
-        m_creature->SummonCreature(NPC_BURNING_SPIRIT, fX, fY, fZ, m_creature->GetAngle(fX, fY) + M_PI_F, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+        m_creature->SummonCreature(NPC_BURNING_SPIRIT, fX, fY, fZ, m_creature->GetAngle(fX, fY) + M_PI_F, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 60000);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoCastSpellIfCan(m_creature, SPELL_FIREBLAST);
     }
@@ -64,7 +63,7 @@ struct MANGOS_DLL_DECL boss_ambassador_flamelashAI : public ScriptedAI
         pSummoned->GetMotionMaster()->MovePoint(1, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ());
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId) override
+    void SummonedMovementInform(Creature* pSummoned, uint32 /*uiMotionType*/, uint32 uiPointId) override
     {
         if (uiPointId != 1)
             return;

@@ -55,7 +55,7 @@ struct MANGOS_DLL_DECL boss_gythAI : public ScriptedAI
     bool m_bSummonedRend;
     bool m_bHasChromaticChaos;
 
-    void Reset()
+    void Reset() override
     {
         uiCorrosiveAcidTimer = 8000;
         uiFreezeTimer        = 11000;

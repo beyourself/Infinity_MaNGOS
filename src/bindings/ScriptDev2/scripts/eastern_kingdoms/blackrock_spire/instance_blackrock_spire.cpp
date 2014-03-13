@@ -569,7 +569,7 @@ void instance_blackrock_spire::DoSendNextFlamewreathWave()
             pSummoner->GetRandomPoint(rookeryEventSpawnPos[0], rookeryEventSpawnPos[1], rookeryEventSpawnPos[2], 2.5f, fX, fY, fZ);
             // Summon Rookery Hatchers in first wave, else random
             if (pSummoned = pSummoner->SummonCreature(urand(0, 1) && m_uiFlamewreathWaveCount ? NPC_ROOKERY_GUARDIAN : NPC_ROOKERY_HATCHER,
-                                                      fX, fY, fZ, 0.0, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000))
+                            fX, fY, fZ, 0.0, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000))
             {
                 pSummoner->GetContactPoint(pSummoned, fX, fY, fZ);
                 pSummoned->GetMotionMaster()->MovePoint(1, fX, fY, pSummoner->GetPositionZ());
@@ -668,7 +668,7 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
     return false;
 }
 
-bool ProcessEventId_event_spell_altar_emberseer(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_spell_altar_emberseer(uint32 /*uiEventId*/, Object* pSource, Object* /*pTarget*/, bool bIsStart)
 {
     if (bIsStart && pSource->GetTypeId() == TYPEID_PLAYER)
     {
@@ -681,7 +681,7 @@ bool ProcessEventId_event_spell_altar_emberseer(uint32 uiEventId, Object* pSourc
     return false;
 }
 
-bool GOUse_go_father_flame(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_father_flame(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (instance_blackrock_spire* pInstance = (instance_blackrock_spire*)pGo->GetInstanceData())
         pInstance->StartflamewreathEventIfCan();

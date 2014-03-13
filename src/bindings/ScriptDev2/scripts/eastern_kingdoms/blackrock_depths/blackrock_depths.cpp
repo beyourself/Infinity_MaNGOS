@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -42,7 +41,7 @@ EndContentData */
 ## go_shadowforge_brazier
 ######*/
 
-bool GOUse_go_shadowforge_brazier(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_shadowforge_brazier(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData())
     {
@@ -58,7 +57,7 @@ bool GOUse_go_shadowforge_brazier(Player* pPlayer, GameObject* pGo)
 ## go_relic_coffer_door
 ######*/
 
-bool GOUse_go_relic_coffer_door(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_relic_coffer_door(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData())
     {
@@ -191,9 +190,9 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
 
     uint32 m_uiGladiatorId[MAX_THELDREN_ADDS];
 
-    GuidList m_lSummonedGuidList;
+    GuidList m_lSummonedGUIDList;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -216,7 +215,7 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
         m_creature->GetRandomPoint(fX, fY, fZ, 10.0f, fcX, fcY, fcZ);
         pSummoned->GetMotionMaster()->MovePoint(1, fcX, fcY, fcZ);
 
-        m_lSummonedGuidList.push_back(pSummoned->GetObjectGuid());
+        m_lSummonedGUIDList.push_back(pSummoned->GetObjectGuid());
     }
 
     void DoChallengeQuestCredit()
@@ -231,7 +230,7 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* /*pSummoned*/) override
     {
         ++m_uiMobDeadCount;
 
@@ -306,7 +305,7 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_pInstance)
             return;
@@ -326,12 +325,12 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
             }
 
             // Despawn Summoned Mobs
-            for (GuidList::const_iterator itr = m_lSummonedGuidList.begin(); itr != m_lSummonedGuidList.end(); ++itr)
+            for (GuidList::const_iterator itr = m_lSummonedGUIDList.begin(); itr != m_lSummonedGUIDList.end(); ++itr)
             {
                 if (Creature* pSummoned = m_creature->GetMap()->GetCreature(*itr))
                     pSummoned->ForcedDespawn();
             }
-            m_lSummonedGuidList.clear();
+            m_lSummonedGUIDList.clear();
 
             // Despawn NPC
             m_creature->ForcedDespawn();
@@ -416,7 +415,7 @@ struct MANGOS_DLL_DECL npc_grimstoneAI : public npc_escortAI
                         break;
                     case 10:
                         // Boss dead
-                        m_lSummonedGuidList.clear();
+                        m_lSummonedGUIDList.clear();
                         m_pInstance->DoUseDoorOrButton(GO_ARENA_2);
                         m_pInstance->DoUseDoorOrButton(GO_ARENA_3);
                         m_pInstance->DoUseDoorOrButton(GO_ARENA_4);
@@ -490,7 +489,7 @@ bool GossipHello_npc_kharan_mighthammer(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_kharan_mighthammer(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_kharan_mighthammer(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {
@@ -564,7 +563,7 @@ struct MANGOS_DLL_DECL npc_rocknotAI : public npc_escortAI
     uint32 m_uiBreakKegTimer;
     uint32 m_uiBreakDoorTimer;
 
-    void Reset()
+    void Reset() override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
@@ -605,7 +604,7 @@ struct MANGOS_DLL_DECL npc_rocknotAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_pInstance)
             return;
@@ -650,7 +649,7 @@ CreatureAI* GetAI_npc_rocknot(Creature* pCreature)
     return new npc_rocknotAI(pCreature);
 }
 
-bool QuestRewarded_npc_rocknot(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
+bool QuestRewarded_npc_rocknot(Player* /*pPlayer*/, Creature* pCreature, Quest const* pQuest)
 {
     ScriptedInstance* pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
 
@@ -737,13 +736,13 @@ struct MANGOS_DLL_DECL npc_marshal_windsorAI : public npc_escortAI
 
     uint8 m_uiEventPhase;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
             m_uiEventPhase = 0;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         switch (urand(0, 2))
         {
@@ -892,7 +891,7 @@ struct MANGOS_DLL_DECL npc_marshal_windsorAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 /*uiDiff*/) override
     {
         // Handle escort resume events
         if (m_pInstance && m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == SPECIAL)
@@ -954,7 +953,7 @@ bool GossipHello_npc_dughal_stormwing(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_dughal_stormwing(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_dughal_stormwing(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -988,7 +987,7 @@ bool GossipHello_npc_tobias_seecher(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_tobias_seecher(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_tobias_seecher(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -1031,7 +1030,7 @@ bool GossipHello_boss_doomrel(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_boss_doomrel(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_boss_doomrel(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {

@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software licensed under GPL version 2
  * Please see the included DOCS/LICENSE.TXT for more information */
 
@@ -130,7 +129,7 @@ class MANGOS_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         void OnCreatureCreate(Creature* pCreature) override;
         void OnCreatureEnterCombat(Creature* pCreature) override;
         void OnCreatureDeath(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnObjectCreate(GameObject* pGo) override;
 
         void SetData(uint32 uiType, uint32 uiData) override;

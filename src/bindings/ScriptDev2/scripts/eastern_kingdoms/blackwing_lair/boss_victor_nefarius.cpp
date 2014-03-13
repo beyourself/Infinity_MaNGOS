@@ -124,7 +124,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
     uint32 m_uiShadowCommandTimer;
     uint32 m_uiShadowBlinkTimer;
 
-    void Reset()
+    void Reset() override
     {
         // Check the map id because the same creature entry is involved in other scripted event in other instance
         if (m_creature->GetMapId() != MAP_ID_BWL)
@@ -147,7 +147,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
             m_creature->SetVisibility(VISIBILITY_ON);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NEFARIAN, IN_PROGRESS);
@@ -211,7 +211,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (m_creature->GetMapId() != MAP_ID_BWL)
             return;
@@ -223,7 +223,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
             pSummoned->CastSpell(pSummoned, SPELL_SUMMON_DRAKONID_BONES, true);
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         // Start combat after the dialogue is finished
         if (iEntry == SPELL_SHADOWBLINK)
@@ -372,7 +372,7 @@ bool GossipHello_boss_victor_nefarius(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_boss_victor_nefarius(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_boss_victor_nefarius(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (pCreature->GetMapId() != MAP_ID_BWL)
         return true;

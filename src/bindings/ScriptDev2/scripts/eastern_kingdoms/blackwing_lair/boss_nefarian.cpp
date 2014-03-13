@@ -82,7 +82,7 @@ struct MANGOS_DLL_DECL boss_nefarianAI : public ScriptedAI
     bool m_bPhase3;
     bool m_bHasEndYell;
 
-    void Reset()
+    void Reset() override
     {
         m_uiShadowFlameTimer    = 12000;                    // These times are probably wrong
         m_uiBellowingRoarTimer  = 30000;
@@ -102,7 +102,7 @@ struct MANGOS_DLL_DECL boss_nefarianAI : public ScriptedAI
         DoScriptText(SAY_SLAY, m_creature, pVictim);
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -129,7 +129,7 @@ struct MANGOS_DLL_DECL boss_nefarianAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 

@@ -59,7 +59,7 @@ struct MANGOS_DLL_DECL boss_razorgoreAI : public ScriptedAI
 
     bool m_bEggsExploded;
 
-    void Reset()
+    void Reset() override
     {
         m_uiIntroVisualTimer    = 5000;
         m_bEggsExploded         = false;
@@ -70,7 +70,7 @@ struct MANGOS_DLL_DECL boss_razorgoreAI : public ScriptedAI
         m_uiFireballVolleyTimer = urand(15000, 20000);
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
         {
@@ -214,12 +214,12 @@ bool EffectDummyGameObj_go_black_dragon_egg(Unit* pCaster, uint32 uiSpellId, Spe
         {
             if (urand(0, 1))
             {
-                    switch (urand(0, 2))
-                    {
-                        case 0: DoScriptText(SAY_EGGS_BROKEN_1, pCaster); break;
-                        case 1: DoScriptText(SAY_EGGS_BROKEN_2, pCaster); break;
-                        case 2: DoScriptText(SAY_EGGS_BROKEN_3, pCaster); break;
-                    }
+                switch (urand(0, 2))
+                {
+                    case 0: DoScriptText(SAY_EGGS_BROKEN_1, pCaster); break;
+                    case 1: DoScriptText(SAY_EGGS_BROKEN_2, pCaster); break;
+                    case 2: DoScriptText(SAY_EGGS_BROKEN_3, pCaster); break;
+                }
             }
 
             // Store the eggs which are destroyed, in order to count them for the second phase
