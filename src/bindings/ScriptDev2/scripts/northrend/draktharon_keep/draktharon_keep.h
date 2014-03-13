@@ -64,7 +64,7 @@ class MANGOS_DLL_DECL instance_draktharon_keep : public ScriptedInstance
         uint32 GetData(uint32 uiType) const override;
 
         void OnCreatureEnterCombat(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnCreatureDeath(Creature* pCreature) override;
 
         void OnCreatureCreate(Creature* pCreature) override;
