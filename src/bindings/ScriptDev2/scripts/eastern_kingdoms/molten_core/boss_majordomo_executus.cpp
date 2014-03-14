@@ -87,7 +87,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
     uint8 m_uiSpeech;
     GuidList m_luiMajordomoAddsGUIDs;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMagicReflectionTimer  = 30000;                  // Damage reflection first so we alternate
         m_uiDamageReflectionTimer = 15000;
@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
         m_uiSpeech = 0;
     }
 
-    void KilledUnit(Unit* pVictim) override
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         if (urand(0, 4))
             return;
@@ -108,7 +108,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
         DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_UNIT && pWho->GetEntry() == NPC_RAGNAROS)
             return;
@@ -210,7 +210,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_FLAMEWAKER_HEALER || pSummoned->GetEntry() == NPC_FLAMEWAKER_ELITE)
         {
@@ -242,7 +242,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
         m_luiMajordomoAddsGUIDs.clear();
     }
 
-    void DamageTaken(Unit* pDealer, uint32& uiDamage) override
+    void DamageTaken(Unit* /*pDealer*/, uint32& uiDamage) override
     {
         if (uiDamage > m_creature->GetHealth())
         {
@@ -318,7 +318,7 @@ struct MANGOS_DLL_DECL boss_majordomoAI : public ScriptedAI
                         // Summon Ragnaros
                         if (m_pInstance)
                             if (GameObject* pGo = m_pInstance->GetSingleGameObjectFromStorage(GO_LAVA_STEAM))
-                                m_creature->SummonCreature(NPC_RAGNAROS, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), fmod(m_creature->GetOrientation() + M_PI, 2 * M_PI), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 2 * HOUR * IN_MILLISECONDS);
+                                m_creature->SummonCreature(NPC_RAGNAROS, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), fmod(m_creature->GetOrientation() + M_PI, 2 * M_PI), TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 2 * HOUR * IN_MILLISECONDS);
                         ++m_uiSpeech;
                         m_uiSpeechTimer = 8700;
                         break;
@@ -431,7 +431,7 @@ bool GossipHello_boss_majordomo(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_boss_majordomo(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 uiAction)
+bool GossipSelect_boss_majordomo(Player* pPlayer, Creature* pCreature, uint32 /*sender*/, uint32 uiAction)
 {
     switch (uiAction)
     {

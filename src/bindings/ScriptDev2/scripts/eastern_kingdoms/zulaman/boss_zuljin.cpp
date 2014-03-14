@@ -152,7 +152,7 @@ struct MANGOS_DLL_DECL boss_zuljinAI : public ScriptedAI
 
     GuidList m_lSummonsList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiHealthCheck         = 80;
         m_uiPhase               = PHASE_TROLL;
@@ -460,11 +460,8 @@ struct MANGOS_DLL_DECL boss_zuljinAI : public ScriptedAI
 
                 if (m_uiFlameBreathTimer < uiDiff)
                 {
-                    if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                    {
-                        if (DoCastSpellIfCan(m_creature, SPELL_FLAME_BREATH) == CAST_OK)
-                            m_uiFlameBreathTimer = 15000;
-                    }
+                    if (DoCastSpellIfCan(m_creature, SPELL_FLAME_BREATH) == CAST_OK)
+                        m_uiFlameBreathTimer = 15000;
                 }
                 else
                     m_uiFlameBreathTimer -= uiDiff;
@@ -495,7 +492,7 @@ struct MANGOS_DLL_DECL npc_feather_vortexAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset() { }
+    void Reset() override { }
 
     void SpellHitTarget(Unit* pTarget, SpellEntry const* pSpellEntry) override
     {

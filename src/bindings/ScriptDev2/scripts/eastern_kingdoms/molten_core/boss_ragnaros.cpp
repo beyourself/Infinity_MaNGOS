@@ -80,7 +80,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
     bool m_bHasSubmergedOnce;
     bool m_bIsSubmerged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWrathOfRagnarosTimer = 30000;                   // TODO Research more, according to wowwiki 25s, but timers up to 34s confirmed
         m_uiHammerTimer = 11000;                            // TODO wowwiki states 20-30s timer, but ~11s confirmed
@@ -106,13 +106,13 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
         DoScriptText(SAY_KILL, m_creature);
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAGNAROS, DONE);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_UNIT && pWho->GetEntry() == NPC_MAJORDOMO)
             return;
@@ -135,7 +135,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
         ScriptedAI::EnterEvadeMode();
     }
 
-    void SummonedCreatureJustDied(Creature* pSummmoned)
+    void SummonedCreatureJustDied(Creature* pSummmoned) override
     {
         // If all Sons of Flame are dead, trigger emerge
         if (pSummmoned->GetEntry() == NPC_SON_OF_FLAME)
@@ -272,7 +272,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
 
             // Say dependend if first time or not
             DoScriptText(!m_bHasSubmergedOnce ? SAY_REINFORCEMENTS_1 : SAY_REINFORCEMENTS_2, m_creature);
-            m_bHasSubmergedOnce = false;
+            m_bHasSubmergedOnce = true;
 
             // Summon 8 elementals at random points around the boss
             float fX, fY, fZ;

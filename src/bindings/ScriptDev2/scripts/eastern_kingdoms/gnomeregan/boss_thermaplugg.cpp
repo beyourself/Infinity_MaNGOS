@@ -62,7 +62,7 @@ struct MANGOS_DLL_DECL boss_thermapluggAI : public ScriptedAI
     GuidList m_lSummonedBombGUIDs;
     GuidList m_lLandedBombGUIDs;
 
-    void Reset()
+    void Reset() override
     {
         m_uiKnockAwayTimer = urand(17000, 20000);
         m_uiActivateBombTimer = urand(10000, 15000);
@@ -114,20 +114,16 @@ struct MANGOS_DLL_DECL boss_thermapluggAI : public ScriptedAI
 
     void JustReachedHome() override
     {
-        if (!m_pInstance || m_pInstance->GetData(TYPE_THERMAPLUGG) == FAIL)
-            return;
-
-        m_pInstance->SetData(TYPE_THERMAPLUGG,FAIL);
-
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_THERMAPLUGG, FAIL);
 
         // Remove remaining bombs
-        while (!m_lSummonedBombGUIDs.empty())
+        for (GuidList::const_iterator itr = m_lSummonedBombGUIDs.begin(); itr != m_lSummonedBombGUIDs.end(); ++itr)
         {
-            ObjectGuid guid = m_lSummonedBombGUIDs.back();
-            m_lSummonedBombGUIDs.pop_back();
-            if (Creature* pBomb = m_creature->GetMap()->GetCreature(guid))
+            if (Creature* pBomb = m_creature->GetMap()->GetCreature(*itr))
                 pBomb->ForcedDespawn();
         }
+        m_lSummonedBombGUIDs.clear();
     }
 
     void JustSummoned(Creature* pSummoned) override

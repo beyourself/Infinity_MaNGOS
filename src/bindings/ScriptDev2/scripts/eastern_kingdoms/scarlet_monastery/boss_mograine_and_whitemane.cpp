@@ -68,7 +68,7 @@ struct MANGOS_DLL_DECL boss_scarlet_commander_mograineAI : public ScriptedAI
     bool m_bHeal;
     bool m_bFakeDeath;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCrusaderStrike_Timer  = 8400;
         m_uiHammerOfJustice_Timer = 9600;
@@ -130,7 +130,7 @@ struct MANGOS_DLL_DECL boss_scarlet_commander_mograineAI : public ScriptedAI
                 m_creature->InterruptNonMeleeSpells(false);
 
             m_creature->ClearComboPointHolders();
-            m_creature->RemoveAllAuras();
+            m_creature->RemoveAllAurasOnDeath();
             m_creature->ClearAllReactives();
 
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -222,7 +222,7 @@ struct MANGOS_DLL_DECL boss_high_inquisitor_whitemaneAI : public ScriptedAI
     bool m_bCanResurrectCheck;
     bool m_bCanResurrect;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWait_Timer            = 7000;
         m_uiHeal_Timer            = 10000;

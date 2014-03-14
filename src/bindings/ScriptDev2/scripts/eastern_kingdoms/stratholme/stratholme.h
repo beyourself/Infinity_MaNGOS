@@ -124,7 +124,7 @@ class MANGOS_DLL_DECL instance_stratholme : public ScriptedInstance
         void Load(const char* chrIn) override;
 
         void OnCreatureEnterCombat(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnCreatureDeath(Creature* pCreature) override;
 
         void Update(uint32 uiDiff) override;

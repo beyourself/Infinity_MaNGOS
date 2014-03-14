@@ -108,7 +108,7 @@ struct MANGOS_DLL_DECL npc_barnesAI : public npc_escortAI, private DialogueHelpe
 
     ObjectGuid m_spotlightGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_spotlightGuid.Clear();
     }
@@ -370,7 +370,7 @@ struct MANGOS_DLL_DECL npc_image_of_medivhAI : public ScriptedAI, private Dialog
 
     ObjectGuid m_eventStarterGuid;
 
-    void Reset() { }
+    void Reset() override { }
 
     void AttackStart(Unit* /*pWho*/) override { }
     void MoveInLineOfSight(Unit* /*pWho*/) override { }
@@ -382,7 +382,7 @@ struct MANGOS_DLL_DECL npc_image_of_medivhAI : public ScriptedAI, private Dialog
             pSummoned->SetLevitate(true);
             pSummoned->SetWalk(false);
             pSummoned->GetMotionMaster()->MovePoint(POINT_ID_INTRO, afArcanagosMoveLoc[0], afArcanagosMoveLoc[1], afArcanagosMoveLoc[2]);
-            pSummoned->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
+            pSummoned->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
         }
     }
 
@@ -459,7 +459,7 @@ struct MANGOS_DLL_DECL npc_image_arcanagosAI : public ScriptedAI
 {
     npc_image_arcanagosAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
-    void Reset() { }
+    void Reset() override { }
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {

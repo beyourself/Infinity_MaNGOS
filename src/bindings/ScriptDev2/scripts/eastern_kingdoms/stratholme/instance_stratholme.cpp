@@ -514,7 +514,7 @@ void instance_stratholme::DoSortZiggurats()
         Creature* pCrystal = instance->GetCreature(*itr);
         if (!pCrystal)
         {
-            m_luiCrystalGUIDs.erase(itr++);
+            itr = m_luiCrystalGUIDs.erase(itr);
             continue;
         }
 
@@ -526,7 +526,7 @@ void instance_stratholme::DoSortZiggurats()
                 if (pCrystal->IsWithinDistInMap(pZigguratDoor, 50.0f, false))
                 {
                     m_zigguratStorage[i].m_crystalGuid = pCrystal->GetObjectGuid();
-                    m_luiCrystalGUIDs.erase(itr);
+                    itr = m_luiCrystalGUIDs.erase(itr);
                     bAlreadyIterated = true;
                     break;
                 }

@@ -101,7 +101,7 @@ struct MANGOS_DLL_DECL boss_mandokirAI : public ScriptedAI
     float m_fTargetThreat;
     ObjectGuid m_watchTargetGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWatchTimer          = 33000;
         m_uiCleaveTimer         = 7000;
@@ -318,7 +318,7 @@ struct MANGOS_DLL_DECL boss_mandokirAI : public ScriptedAI
                 m_uiFearTimer -= uiDiff;
 
             // Mortal Strike if target below 50% hp
-            if (m_creature->getVictim() && m_creature->getVictim()->GetHealthPercent() < 50.0f)
+            if (m_creature->getVictim()->GetHealthPercent() < 50.0f)
             {
                 if (m_uiMortalStrikeTimer < uiDiff)
                 {
@@ -341,7 +341,7 @@ struct MANGOS_DLL_DECL mob_ohganAI : public ScriptedAI
 
     uint32 m_uiSunderArmorTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSunderArmorTimer = 5000;
     }
