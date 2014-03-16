@@ -89,16 +89,9 @@ struct MANGOS_DLL_DECL boss_moorabiAI : public ScriptedAI
     {
         DoScriptText(SAY_AGGRO, m_creature);
         DoCastSpellIfCan(m_creature, SPELL_MOJO_FRENZY);
-        m_creature->SetInCombatWithZone();
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MOORABI, IN_PROGRESS);
-    }
-
-    void JustReachedHome() override
-    {
-        if(m_pInstance)
-            m_pInstance->SetData(TYPE_MOORABI, NOT_STARTED);
     }
 
     void KilledUnit(Unit* /*pVictim*/) override
@@ -117,14 +110,6 @@ struct MANGOS_DLL_DECL boss_moorabiAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MOORABI, DONE);
-
-        if (!m_bIsRegularMode)
-        {
-            if (m_bMammothPhase)
-                return;
-            else
-                m_pInstance->DoCompleteAchievement(2040);
-        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -136,6 +121,10 @@ struct MANGOS_DLL_DECL boss_moorabiAI : public ScriptedAI
         {
             DoScriptText(EMOTE_TRANSFORMED, m_creature);
             m_bMammothPhase = true;
+
+            // Set the achievement to failed
+            if (m_pInstance)
+                m_pInstance->SetLessRabiAchievementCriteria(false);
         }
 
         if (m_uiRoarTimer < uiDiff)

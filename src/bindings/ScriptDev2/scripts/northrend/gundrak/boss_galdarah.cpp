@@ -39,9 +39,6 @@ enum
 
     EMOTE_IMPALED              = -1604030,
 
-    ACHIEVEMENT_WHAT_THE_ECK   = 1864,
-    ACHIEVEMENT_SHARE_THE_LOVE = 2152,
-
     NPC_RHINO_SPIRIT           = 29791,
     SPELL_STAMPEDE_RHINO       = 55220,
     SPELL_STAMPEDE_RHINO_H     = 59823,
@@ -102,18 +99,12 @@ struct MANGOS_DLL_DECL boss_galdarahAI : public ScriptedAI
 
     void Aggro(Unit* /*pWho*/) override
     {
-        m_creature->SetInCombatWithZone();
         DoScriptText(SAY_AGGRO, m_creature);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GALDARAH , IN_PROGRESS);
     }
 
-     void JustReachedHome() override
-    {
-        if(m_pInstance)
-            m_pInstance->SetData(TYPE_GALDARAH, NOT_STARTED);
-    }
     void KilledUnit(Unit* /*pVictim*/) override
     {
         switch (urand(0, 2))
@@ -124,26 +115,32 @@ struct MANGOS_DLL_DECL boss_galdarahAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller) override
+    void JustReachedHome() override
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_GALDARAH, FAIL);
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GALDARAH, DONE);
-
-        if (pKiller->HasAura(55817))
-            m_pInstance->DoCompleteAchievement(ACHIEVEMENT_WHAT_THE_ECK);
     }
 
     void JustSummoned(Creature* pSummoned) override
     {
-        pSummoned->setFaction(m_creature->getFaction());
-
         if (pSummoned->GetEntry() == NPC_RHINO_SPIRIT)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, m_bIsRegularMode ? SPELL_STAMPEDE_RHINO : SPELL_STAMPEDE_RHINO_H, SELECT_FLAG_PLAYER))
+            {
                 pSummoned->CastSpell(pTarget, m_bIsRegularMode ? SPELL_STAMPEDE_RHINO : SPELL_STAMPEDE_RHINO_H, false, NULL, NULL, m_creature->GetObjectGuid());
-            pSummoned->ForcedDespawn(1000);
+
+                // Store the player guid in order to count it for the achievement
+                if (m_pInstance)
+                    m_pInstance->SetData(TYPE_ACHIEV_SHARE_LOVE, pTarget->GetGUIDLow());
+            }
         }
     }
 
@@ -155,11 +152,11 @@ struct MANGOS_DLL_DECL boss_galdarahAI : public ScriptedAI
         m_bIsTrollPhase = !m_bIsTrollPhase;
 
         if (m_bIsTrollPhase)
-            DoCast(m_creature, SPELL_TROLL_TRANSFORM);
+            DoCastSpellIfCan(m_creature, SPELL_TROLL_TRANSFORM);
         else
         {
             DoScriptText(urand(0, 1) ? SAY_TRANSFORM_1 : SAY_TRANSFORM_2, m_creature);
-            DoCast(m_creature, SPELL_RHINO_TRANSFORM);
+            DoCastSpellIfCan(m_creature, SPELL_RHINO_TRANSFORM);
 
             m_uiEnrageTimer = 4000;
             m_uiStompTimer  = 1000;
@@ -175,7 +172,7 @@ struct MANGOS_DLL_DECL boss_galdarahAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiAbilityCount >= 2)
+        if (m_uiAbilityCount == 2)
         {
             if (m_uiPhaseChangeTimer < uiDiff)
                 DoPhaseSwitch();
@@ -247,9 +244,8 @@ struct MANGOS_DLL_DECL boss_galdarahAI : public ScriptedAI
                     DoScriptText(EMOTE_IMPALED, m_creature, pTarget);
                     m_uiSpecialAbilityTimer = 12000;
 
-                    
+                    ++m_uiAbilityCount;
                 }
-                ++m_uiAbilityCount;
             }
             else
                 m_uiSpecialAbilityTimer -= uiDiff;
