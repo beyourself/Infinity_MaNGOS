@@ -25,7 +25,6 @@ EndScriptData */
 item_arcane_charges                 Prevent use if player is not flying (cannot cast while on ground)
 item_flying_machine(i34060,i34061)  Engineering crafted flying machines
 item_gor_dreks_ointment(i30175)     Protecting Our Own(q10488)
-Item_jungle_punch_offer
 EndContentData */
 
 #include "precompiled.h"
@@ -128,46 +127,27 @@ bool ItemUse_item_petrov_cluster_bombs(Player* pPlayer, Item* pItem, const Spell
     return false;
 }
 
-/*####
-# jungle_punch_
-####*/
-
-enum
-{
-    SPELL_OFFER_JUNGLE_PUNCH = 51962
-};
-
-bool ItemUse_item_jungle_punch_sample(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
-{
-    Unit* pTarget = pPlayer->GetMap()->GetUnit(pPlayer->GetTargetGuid());
-    if (pTarget && pTarget->GetTypeId() == TYPEID_UNIT)
-    {
-        pPlayer->CastSpell(pTarget, SPELL_OFFER_JUNGLE_PUNCH, false);
-        return true;
-    }
-    else
-    {
-        pPlayer->SendEquipError(EQUIP_ERR_NONE, pItem, NULL);
-        return true;
-    }
-}
-
 void AddSC_item_scripts()
 {
-    AutoScript s;
+    Script* pNewScript;
 
-    s.newScript("item_arcane_charges");
-    s->pItemUse = &ItemUse_item_arcane_charges;
+    pNewScript = new Script;
+    pNewScript->Name = "item_arcane_charges";
+    pNewScript->pItemUse = &ItemUse_item_arcane_charges;
+    pNewScript->RegisterSelf();
 
-    s.newScript("item_flying_machine");
-    s->pItemUse = &ItemUse_item_flying_machine;
+    pNewScript = new Script;
+    pNewScript->Name = "item_flying_machine";
+    pNewScript->pItemUse = &ItemUse_item_flying_machine;
+    pNewScript->RegisterSelf();
 
-    s.newScript("item_gor_dreks_ointment");
-    s->pItemUse = &ItemUse_item_gor_dreks_ointment;
+    pNewScript = new Script;
+    pNewScript->Name = "item_gor_dreks_ointment";
+    pNewScript->pItemUse = &ItemUse_item_gor_dreks_ointment;
+    pNewScript->RegisterSelf();
 
-    s.newScript("item_petrov_cluster_bombs");
-    s->pItemUse = &ItemUse_item_petrov_cluster_bombs;
-
-    s.newScript("item_jungle_punch_sample");
-    s->pItemUse = &ItemUse_item_jungle_punch_sample;
+    pNewScript = new Script;
+    pNewScript->Name = "item_petrov_cluster_bombs";
+    pNewScript->pItemUse = &ItemUse_item_petrov_cluster_bombs;
+    pNewScript->RegisterSelf();
 }

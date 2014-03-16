@@ -38,8 +38,7 @@ enum
     SAY_PATHALEON_INTRO     = -1554028,
 };
 
-static const SPAWNLOCATION aBridgeEventLocs[MAX_BRIDGE_LOCATIONS][4] =
-{
+static const SPAWNLOCATION aBridgeEventLocs[MAX_BRIDGE_LOCATIONS][4] ={
     {
         {NPC_ASTROMAGE,     243.9323f, -24.53621f, 26.3284f, 0},
         {NPC_ASTROMAGE,     240.5847f, -21.25438f, 26.3284f, 0},

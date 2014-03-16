@@ -254,11 +254,26 @@ enum
     NPC_DARKSPINE_MYRMIDON              = 25060,
     NPC_DARKSPINE_SIREN                 = 25073,
 
+    // quest 14107
+    SPELL_BLESSING_OF_PEACE             = 66719,
+    NPC_FALLEN_HERO_SPIRIT              = 32149,
+    NPC_FALLEN_HERO_SPIRIT_PROXY        = 35055,
+    SAY_BLESS_1                         = -1000594,
+    SAY_BLESS_2                         = -1000595,
+    SAY_BLESS_3                         = -1000596,
+    SAY_BLESS_4                         = -1000597,
+    SAY_BLESS_5                         = -1000598,
+
     // quest "The Big Bone Worm" 10930
     SPELL_FUMPING                       = 39246,
     SPELL_SUMMON_HAISHULUD              = 39248,
     NPC_SAND_GNOME                      = 22483,
     NPC_MATURE_BONE_SIFTER              = 22482,
+
+    // quest 12813, by item 40587
+    SPELL_DARKMENDER_TINCTURE           = 52741,
+    SPELL_SUMMON_CORRUPTED_SCARLET      = 54415,
+    NPC_CORPSES_RISE_CREDIT_BUNNY       = 29398,
 
     // quest 12659, item 38731
     SPELL_AHUNAES_KNIFE                 = 52090,
@@ -320,7 +335,7 @@ enum
     GO_RAZORTHORN_DIRT_MOUND            = 187073,
 
     //  for quest 10584
-    SPELL_PROTOVOLTAIC_MAGNETO_COLLECTOR= 37136,
+    SPELL_PROTOVOLTAIC_MAGNETO_COLLECTOR = 37136,
     NPC_ENCASED_ELECTROMENTAL           = 21731,
 
     // quest 6661
@@ -340,6 +355,38 @@ bool EffectAuraDummy_spell_aura_dummy_npc(const Aura* pAura, bool bApply)
 {
     switch (pAura->GetId())
     {
+        case SPELL_BLESSING_OF_PEACE:
+        {
+            Creature* pCreature = (Creature*)pAura->GetTarget();
+
+            if (!pCreature || pCreature->GetEntry() != NPC_FALLEN_HERO_SPIRIT)
+                return true;
+
+            if (pAura->GetEffIndex() != EFFECT_INDEX_0)
+                return true;
+
+            if (bApply)
+            {
+                switch (urand(0, 4))
+                {
+                    case 0: DoScriptText(SAY_BLESS_1, pCreature); break;
+                    case 1: DoScriptText(SAY_BLESS_2, pCreature); break;
+                    case 2: DoScriptText(SAY_BLESS_3, pCreature); break;
+                    case 3: DoScriptText(SAY_BLESS_4, pCreature); break;
+                    case 4: DoScriptText(SAY_BLESS_5, pCreature); break;
+                }
+            }
+            else
+            {
+                if (Player* pPlayer = (Player*)pAura->GetCaster())
+                {
+                    pPlayer->KilledMonsterCredit(NPC_FALLEN_HERO_SPIRIT_PROXY, pCreature->GetObjectGuid());
+                    pCreature->ForcedDespawn();
+                }
+            }
+
+            return true;
+        }
         case SPELL_HEALING_SALVE:
         {
             if (pAura->GetEffIndex() != EFFECT_INDEX_0)
@@ -515,6 +562,24 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
                 ((Player*)pCaster)->KilledMonsterCredit(uiUpdateEntry);
                 pCreatureTarget->ForcedDespawn(20000);
 
+                return true;
+            }
+            return true;
+        }
+        case SPELL_DARKMENDER_TINCTURE:
+        {
+            if (uiEffIndex == EFFECT_INDEX_0)
+            {
+                if (pCaster->GetTypeId() != TYPEID_PLAYER)
+                    return true;
+
+                // TODO: find/fix visual for effect, no related spells found doing this
+
+                pCreatureTarget->CastSpell(pCreatureTarget, SPELL_SUMMON_CORRUPTED_SCARLET, true);
+
+                ((Player*)pCaster)->KilledMonsterCredit(NPC_CORPSES_RISE_CREDIT_BUNNY);
+
+                pCreatureTarget->ForcedDespawn();
                 return true;
             }
             return true;
@@ -807,9 +872,6 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
                 bool isMale = urand(0, 1);
                 Player* pPlayer = pCreatureTarget->GetLootRecipient();
 
-                if (!pPlayer)
-                    return true;
-
                 if (isMale)
                     DoScriptText(SAY_ITS_MALE, pCreatureTarget, pPlayer);
                 else
@@ -994,12 +1056,16 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
 
 void AddSC_spell_scripts()
 {
-    AutoScript s;
+    Script* pNewScript;
 
-    s.newScript("spell_dummy_go");
-    s->pEffectDummyGO = &EffectDummyGameObj_spell_dummy_go;
+    pNewScript = new Script;
+    pNewScript->Name = "spell_dummy_go";
+    pNewScript->pEffectDummyGO = &EffectDummyGameObj_spell_dummy_go;
+    pNewScript->RegisterSelf();
 
-    s.newScript("spell_dummy_npc");
-    s->pEffectDummyNPC = &EffectDummyCreature_spell_dummy_npc;
-    s->pEffectAuraDummy = &EffectAuraDummy_spell_aura_dummy_npc;
+    pNewScript = new Script;
+    pNewScript->Name = "spell_dummy_npc";
+    pNewScript->pEffectDummyNPC = &EffectDummyCreature_spell_dummy_npc;
+    pNewScript->pEffectAuraDummy = &EffectAuraDummy_spell_aura_dummy_npc;
+    pNewScript->RegisterSelf();
 }

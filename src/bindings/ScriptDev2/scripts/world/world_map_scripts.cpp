@@ -31,7 +31,7 @@ struct MANGOS_DLL_DECL world_map_eastern_kingdoms : public ScriptedMap
 {
     world_map_eastern_kingdoms(Map* pMap) : ScriptedMap(pMap) {}
 
-    void OnCreatureCreate(Creature* pCreature) override
+    void OnCreatureCreate(Creature* pCreature)
     {
         switch (pCreature->GetEntry())
         {
@@ -44,7 +44,7 @@ struct MANGOS_DLL_DECL world_map_eastern_kingdoms : public ScriptedMap
         }
     }
 
-    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) override {}
+    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) {}
 };
 
 InstanceData* GetInstanceData_world_map_eastern_kingdoms(Map* pMap)
@@ -61,18 +61,18 @@ struct MANGOS_DLL_DECL world_map_kalimdor : public ScriptedMap
 
     uint8 m_uiMurkdeepAdds_KilledAddCount;
 
-    void Initialize() override
+    void Initialize()
     {
         m_uiMurkdeepAdds_KilledAddCount = 0;
     }
 
-    void OnCreatureCreate(Creature* pCreature) override
+    void OnCreatureCreate(Creature* pCreature)
     {
         if (pCreature->GetEntry() == NPC_MURKDEEP)
             m_mNpcEntryGuidStore[NPC_MURKDEEP] = pCreature->GetObjectGuid();
     }
 
-    void OnCreatureDeath(Creature* pCreature) override
+    void OnCreatureDeath(Creature* pCreature)
     {
         switch (pCreature->GetEntry())
         {
@@ -129,7 +129,7 @@ struct MANGOS_DLL_DECL world_map_kalimdor : public ScriptedMap
         }
     }
 
-    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) override {}
+    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) {}
 };
 
 InstanceData* GetInstanceData_world_map_kalimdor(Map* pMap)
@@ -146,18 +146,18 @@ struct MANGOS_DLL_DECL world_map_outland : public ScriptedMap
 
     uint8 m_uiEmissaryOfHate_KilledAddCount;
 
-    void Initialize() override
+    void Initialize()
     {
         m_uiEmissaryOfHate_KilledAddCount = 0;
     }
 
-    void OnCreatureCreate(Creature* pCreature) override
+    void OnCreatureCreate(Creature* pCreature)
     {
         if (pCreature->GetEntry() == NPC_EMISSARY_OF_HATE)
             m_mNpcEntryGuidStore[NPC_EMISSARY_OF_HATE] = pCreature->GetObjectGuid();
     }
 
-    void OnCreatureDeath(Creature* pCreature) override
+    void OnCreatureDeath(Creature* pCreature)
     {
         switch (pCreature->GetEntry())
         {
@@ -176,7 +176,7 @@ struct MANGOS_DLL_DECL world_map_outland : public ScriptedMap
         }
     }
 
-    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) override {}
+    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) {}
 };
 
 InstanceData* GetInstanceData_world_map_outland(Map* pMap)
@@ -191,7 +191,7 @@ struct MANGOS_DLL_DECL world_map_northrend : public ScriptedMap
 {
     world_map_northrend(Map* pMap) : ScriptedMap(pMap) {}
 
-    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) override {}
+    void SetData(uint32 /*uiType*/, uint32 /*uiData*/) {}
 };
 
 InstanceData* GetInstanceData_world_map_northrend(Map* pMap)
@@ -201,17 +201,25 @@ InstanceData* GetInstanceData_world_map_northrend(Map* pMap)
 
 void AddSC_world_map_scripts()
 {
-    AutoScript s;
+    Script* pNewScript;
 
-    s.newScript("world_map_eastern_kingdoms");
-    s->GetInstanceData = &GetInstanceData_world_map_eastern_kingdoms;
+    pNewScript = new Script;
+    pNewScript->Name = "world_map_eastern_kingdoms";
+    pNewScript->GetInstanceData = &GetInstanceData_world_map_eastern_kingdoms;
+    pNewScript->RegisterSelf();
 
-    s.newScript("world_map_kalimdor");
-    s->GetInstanceData = &GetInstanceData_world_map_kalimdor;
+    pNewScript = new Script;
+    pNewScript->Name = "world_map_kalimdor";
+    pNewScript->GetInstanceData = &GetInstanceData_world_map_kalimdor;
+    pNewScript->RegisterSelf();
 
-    s.newScript("world_map_outland");
-    s->GetInstanceData = &GetInstanceData_world_map_outland;
+    pNewScript = new Script;
+    pNewScript->Name = "world_map_outland";
+    pNewScript->GetInstanceData = &GetInstanceData_world_map_outland;
+    pNewScript->RegisterSelf();
 
-    s.newScript("world_map_northrend");
-    s->GetInstanceData = &GetInstanceData_world_map_northrend;
+    pNewScript = new Script;
+    pNewScript->Name = "world_map_northrend";
+    pNewScript->GetInstanceData = &GetInstanceData_world_map_northrend;
+    pNewScript->RegisterSelf();
 }
