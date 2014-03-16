@@ -84,7 +84,7 @@ struct MANGOS_DLL_DECL boss_ouroAI : public Scripted_NoMovementAI
 
     ObjectGuid m_ouroTriggerGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSweepTimer        = urand(35000, 40000);
         m_uiSandBlastTimer    = urand(30000, 45000);
@@ -260,7 +260,7 @@ struct MANGOS_DLL_DECL npc_ouro_spawnerAI : public Scripted_NoMovementAI
     uint32 m_uiQuakeTimer;
     bool m_bHasSummoned;
 
-    void Reset()
+    void Reset() override
     {
         m_uiQuakeTimer = 1000;
         m_bHasSummoned = false;

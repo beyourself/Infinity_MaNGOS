@@ -109,7 +109,7 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
     bool m_bIsEpilogue;
     bool m_bStartEpilogue;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDrainNordrassilTimer = 10000;
         m_uiFearTimer            = 40000;
@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
         m_bStartEpilogue         = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
     }
@@ -352,7 +352,7 @@ struct MANGOS_DLL_DECL npc_doomfire_spiritAI : public ScriptedAI
     uint32 m_uiChangeTargetTimer;
     float m_fAngle;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDoomfireLoadTimer = 1000;
         m_uiChangeTargetTimer = 1500;

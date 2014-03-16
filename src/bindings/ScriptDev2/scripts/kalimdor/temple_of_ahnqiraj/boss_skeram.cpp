@@ -69,7 +69,7 @@ struct MANGOS_DLL_DECL boss_skeramAI : public ScriptedAI
 
     bool m_bIsImage;
 
-    void Reset()
+    void Reset() override
     {
         m_uiArcaneExplosionTimer = urand(6000, 12000);
         m_uiFullFillmentTimer    = 15000;

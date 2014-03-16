@@ -73,7 +73,7 @@ struct MANGOS_DLL_DECL boss_ayamissAI : public ScriptedAI
     ObjectGuid m_paralyzeTarget;
     GuidList m_lSwarmersGuidList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiStingerSprayTimer   = urand(20000, 30000);
         m_uiPoisonStingerTimer  = 5000;
@@ -261,7 +261,7 @@ struct MANGOS_DLL_DECL npc_hive_zara_larvaAI : public ScriptedAI
 
     instance_ruins_of_ahnqiraj* m_pInstance;
 
-    void Reset() { }
+    void Reset() override { }
 
     void AttackStart(Unit* pWho) override
     {

@@ -66,7 +66,7 @@ class MANGOS_DLL_DECL instance_mount_hyjal : public ScriptedInstance
         void OnObjectCreate(GameObject* pGo) override;
 
         void OnCreatureEnterCombat(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnCreatureDeath(Creature* pCreature) override;
 
         void SetData(uint32 uiType, uint32 uiData) override;
@@ -81,7 +81,7 @@ class MANGOS_DLL_DECL instance_mount_hyjal : public ScriptedInstance
         uint32 m_auiEncounter[MAX_ENCOUNTER];
         std::string m_strSaveData;
 
-        GuidList lAncientGemGuidList;
+        GuidList lAncientGemGUIDList;
 
         uint32 m_uiTrashCount;
 };

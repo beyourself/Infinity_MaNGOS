@@ -1,5 +1,4 @@
 /* Copyright (C) 2006 - 2013 ScriptDev2 <http://www.scriptdev2.com/>
- * Copyright (C) 2011 - 2013 MangosR2 <http://github.com/mangosR2/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -40,7 +39,7 @@ struct MANGOS_DLL_DECL boss_noxxionAI : public ScriptedAI
     uint32 m_uiUppercutTimer;
     uint32 m_uiSummonTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiToxicVolleyTimer   = 7000;
         m_uiUppercutTimer      = 16000;

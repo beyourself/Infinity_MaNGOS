@@ -89,7 +89,7 @@ struct MANGOS_DLL_DECL npc_belnistraszAI : public npc_escortAI
     uint32 m_uiFireballTimer;
     uint32 m_uiFrostNovaTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFireballTimer  = 1000;
         m_uiFrostNovaTimer = 6000;

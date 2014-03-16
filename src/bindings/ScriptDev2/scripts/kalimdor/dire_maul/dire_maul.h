@@ -106,7 +106,7 @@ class MANGOS_DLL_DECL instance_dire_maul : public ScriptedInstance
         const char* Save() const override { return m_strInstData.c_str(); }
         void Load(const char* chrIn) override;
 
-        bool CheckConditionCriteriaMeet(Player const* pPlayer, uint32 uiInstanceConditionId, WorldObject const* pConditionSource, ConditionSource conditionSourceType) const override;
+        bool CheckConditionCriteriaMeet(Player const* pPlayer, uint32 uiInstanceConditionId, WorldObject const* pConditionSource, uint32 conditionSourceType) const override;
 
     protected:
         bool CheckAllGeneratorsDestroyed();
@@ -125,8 +125,8 @@ class MANGOS_DLL_DECL instance_dire_maul : public ScriptedInstance
         ObjectGuid m_aCrystalGeneratorGuid[MAX_GENERATORS];
 
         GuidList m_luiHighborneSummonerGUIDs;
-        std::queue<ObjectGuid> m_lGeneratorGuardGUIDs;
-        GuidSet  m_sSortedGeneratorGuards[MAX_GENERATORS];
+        GuidList m_lGeneratorGuardGUIDs;
+        std::set<uint32> m_sSortedGeneratorGuards[MAX_GENERATORS];
 
         // North
         bool m_bDoNorthBeforeWest;

@@ -56,7 +56,7 @@ struct MANGOS_DLL_DECL boss_temporusAI : public ScriptedAI
     uint32 m_uiMortalWoundTimer;
     uint32 m_uiWingBuffetTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiHasteTimer           = urand(15000, 23000);
         m_uiSpellReflectionTimer = 30000;

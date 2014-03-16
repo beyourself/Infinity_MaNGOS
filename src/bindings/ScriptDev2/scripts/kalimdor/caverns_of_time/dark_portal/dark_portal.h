@@ -104,7 +104,7 @@ class MANGOS_DLL_DECL instance_dark_portal : public ScriptedInstance
         void OnCreatureCreate(Creature* pCreature) override;
 
         void OnCreatureEnterCombat(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnCreatureDeath(Creature* pCreature) override;
 
         void SetData(uint32 uiType, uint32 uiData) override;

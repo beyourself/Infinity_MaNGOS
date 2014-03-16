@@ -56,7 +56,7 @@ struct MANGOS_DLL_DECL boss_kriAI : public ScriptedAI
     uint32 m_uiCleaveTimer;
     uint32 m_uiToxicVolleyTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCleaveTimer      = urand(4000, 8000);
         m_uiToxicVolleyTimer = urand(6000, 12000);
@@ -125,7 +125,7 @@ struct MANGOS_DLL_DECL boss_vemAI : public ScriptedAI
     uint32 m_uiChargeTimer;
     uint32 m_uiKnockBackTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiChargeTimer     = urand(15000, 27000);
         m_uiKnockBackTimer  = urand(8000, 20000);
@@ -202,7 +202,7 @@ struct MANGOS_DLL_DECL boss_yaujAI : public ScriptedAI
     uint32 m_uiHealTimer;
     uint32 m_uiFearTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiHealTimer = urand(25000, 40000);
         m_uiFearTimer = urand(12000, 24000);

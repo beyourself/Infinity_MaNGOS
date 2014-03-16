@@ -145,7 +145,7 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
 
     uint32 m_uiPhaseTimer;
 
-    void Reset()
+    void Reset() override
     {
         if (!IsCombatMovement())
             SetCombatMovement(true);

@@ -105,7 +105,7 @@ class MANGOS_DLL_DECL instance_ruins_of_ahnqiraj : public ScriptedInstance
         void OnPlayerEnter(Player* pPlayer) override;
 
         void OnCreatureEnterCombat(Creature* pCreature) override;
-        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature);
         void OnCreatureDeath(Creature* pCreature) override;
 
         void SetData(uint32 uiType, uint32 uiData) override;

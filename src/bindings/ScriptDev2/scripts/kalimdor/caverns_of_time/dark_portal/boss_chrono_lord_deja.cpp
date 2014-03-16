@@ -57,7 +57,7 @@ struct MANGOS_DLL_DECL boss_chrono_lord_dejaAI : public ScriptedAI
     uint32 m_uiAttractionTimer;
     uint32 m_uiArcaneDischargeTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiArcaneBlastTimer     = urand(18000, 23000);
         m_uiTimeLapseTimer       = urand(10000, 15000);

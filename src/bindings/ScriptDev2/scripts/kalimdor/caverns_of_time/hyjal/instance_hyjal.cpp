@@ -51,7 +51,7 @@ bool instance_mount_hyjal::IsEncounterInProgress() const
     return false;
 }
 
-void instance_mount_hyjal::OnPlayerEnter(Player* pPlayer)
+void instance_mount_hyjal::OnPlayerEnter(Player* /*pPlayer*/)
 {
     if (GetData(TYPE_AZGALOR) == DONE)
         DoSpawnArchimonde();
@@ -66,7 +66,7 @@ void instance_mount_hyjal::OnCreatureCreate(Creature* pCreature)
 void instance_mount_hyjal::OnObjectCreate(GameObject* pGo)
 {
     if (pGo->GetEntry() == GO_ANCIENT_GEM)
-        lAncientGemGuidList.push_back(pGo->GetObjectGuid());
+        lAncientGemGUIDList.push_back(pGo->GetObjectGuid());
 }
 
 void instance_mount_hyjal::OnCreatureEnterCombat(Creature* pCreature)
@@ -148,9 +148,9 @@ void instance_mount_hyjal::SetData(uint32 uiType, uint32 uiData)
         case TYPE_RETREAT:
             if (uiData == SPECIAL)
             {
-                if (!lAncientGemGuidList.empty())
+                if (!lAncientGemGUIDList.empty())
                 {
-                    for (GuidList::const_iterator itr = lAncientGemGuidList.begin(); itr != lAncientGemGuidList.end(); ++itr)
+                    for (GuidList::const_iterator itr = lAncientGemGUIDList.begin(); itr != lAncientGemGUIDList.end(); ++itr)
                     {
                         // don't know how long it expected
                         DoRespawnGameObject(*itr, DAY);

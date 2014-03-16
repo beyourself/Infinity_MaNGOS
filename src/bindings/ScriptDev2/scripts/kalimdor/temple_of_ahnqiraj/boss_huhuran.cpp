@@ -53,7 +53,7 @@ struct MANGOS_DLL_DECL boss_huhuranAI : public ScriptedAI
 
     bool m_bIsBerserk;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFrenzyTimer         = urand(25000, 35000);
         m_uiWyvernTimer         = urand(18000, 28000);

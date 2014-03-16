@@ -93,7 +93,7 @@ struct MANGOS_DLL_DECL npc_general_andorovAI : public ScriptedAI, private Dialog
 
     uint8 m_uiPointId;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCommandAuraTimer = urand(1000, 3000);
         m_uiBashTimer        = urand(8000, 11000);
@@ -309,7 +309,7 @@ struct MANGOS_DLL_DECL npc_kaldorei_eliteAI : public ScriptedAI
     uint32 m_uiCleaveTimer;
     uint32 m_uiStrikeTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCleaveTimer      = urand(2000, 4000);
         m_uiStrikeTimer      = urand(8000, 11000);

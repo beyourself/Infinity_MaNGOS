@@ -84,7 +84,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
 
     bool m_bSaidIntro;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCrystalPosition = 0;
         m_uiCycloneTimer = 20000;

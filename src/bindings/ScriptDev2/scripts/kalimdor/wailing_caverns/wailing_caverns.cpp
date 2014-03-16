@@ -95,7 +95,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
     uint32 m_uiPoint;
     uint8 m_uiSubeventPhase;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSleepTimer      = 5000;
         m_uiPotionTimer     = 5000;

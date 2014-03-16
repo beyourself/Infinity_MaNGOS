@@ -227,7 +227,7 @@ void hyjalAI::JustReachedHome()
     m_bIsSecondBossDead = m_uiBase ? m_pInstance->GetData(TYPE_AZGALOR) == DONE : m_pInstance->GetData(TYPE_ANETHERON) == DONE;
 }
 
-void hyjalAI::Aggro(Unit* who)
+void hyjalAI::Aggro(Unit* /*who*/)
 {
     for (uint8 i = 0; i < MAX_SPELL; ++i)
         if (m_aSpells[i].m_uiCooldown)
@@ -260,7 +260,7 @@ void hyjalAI::SpawnCreatureForWave(uint32 uiMobEntry)
     }
 
     if (pSpawn)
-        m_creature->SummonCreature(uiMobEntry, pSpawn->m_fX, pSpawn->m_fY, pSpawn->m_fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000);
+        m_creature->SummonCreature(uiMobEntry, pSpawn->m_fX, pSpawn->m_fY, pSpawn->m_fZ, 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 120000);
 }
 
 void hyjalAI::JustSummoned(Creature* pSummoned)
@@ -296,7 +296,7 @@ void hyjalAI::JustSummoned(Creature* pSummoned)
     if (pSummoned->IsWorldBoss())
         m_aBossGuid[!m_bIsFirstBossDead ? 0 : 1] = pSummoned->GetObjectGuid();
     else
-        lWaveMobGuidList.push_back(pSummoned->GetObjectGuid());
+        lWaveMobGUIDList.push_back(pSummoned->GetObjectGuid());
 }
 
 void hyjalAI::SummonedCreatureJustDied(Creature* pSummoned)
@@ -441,7 +441,7 @@ void hyjalAI::DoTalk(YellType pYellType)
         DoScriptText(pYell->m_iTextId, m_creature);
 }
 
-void hyjalAI::SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+void hyjalAI::SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* /*pSpell*/)
 {
     // TODO: this spell should cause misc mobs to despawn
     // if (pSpell->Id == SPELL_MASS_TELEPORT && pTarget->GetTypeId() != TYPEID_PLAYER)
@@ -461,7 +461,7 @@ void hyjalAI::Retreat()
     m_bIsRetreating = true;
 }
 
-void hyjalAI::JustDied(Unit* pKiller)
+void hyjalAI::JustDied(Unit* /*pKiller*/)
 {
     DoTalk(DEATH);
     m_creature->SetActiveObjectState(false);
@@ -481,11 +481,11 @@ void hyjalAI::UpdateAI(const uint32 uiDiff)
             // Skip the master timer, and start next wave in 5. Clear the list, it should not be any here now.
             if (!m_pInstance->GetData(TYPE_TRASH_COUNT))
             {
-                lWaveMobGuidList.clear();
+                lWaveMobGUIDList.clear();
                 m_uiNextWaveTimer = std::min(m_uiNextWaveTimer, (uint32)5000);
             }
 
-            for (GuidList::const_iterator itr = lWaveMobGuidList.begin(); itr != lWaveMobGuidList.end(); ++itr)
+            for (GuidList::const_iterator itr = lWaveMobGUIDList.begin(); itr != lWaveMobGUIDList.end(); ++itr)
             {
                 if (Creature* pTemp = m_pInstance->instance->GetCreature(*itr))
                 {

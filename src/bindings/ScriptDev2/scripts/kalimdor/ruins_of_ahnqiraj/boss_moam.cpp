@@ -52,7 +52,7 @@ struct MANGOS_DLL_DECL boss_moamAI : public ScriptedAI
     uint32 m_uiCheckoutManaTimer;
     uint32 m_uiSummonManaFiendsTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiTrampleTimer            = 9000;
         m_uiManaDrainTimer          = 3000;

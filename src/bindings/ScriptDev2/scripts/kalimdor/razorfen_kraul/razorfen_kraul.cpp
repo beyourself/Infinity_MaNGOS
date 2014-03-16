@@ -67,7 +67,7 @@ struct MANGOS_DLL_DECL npc_willix_the_importerAI : public npc_escortAI
 {
     npc_willix_the_importerAI(Creature* m_creature) : npc_escortAI(m_creature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
     // Exact use of these texts remains unknown, it seems that he should only talk when he initiates the attack or he is the first who is attacked by a npc
     void Aggro(Unit* pWho) override
@@ -169,7 +169,7 @@ struct MANGOS_DLL_DECL npc_snufflenose_gopherAI : public ScriptedPetAI
 
     ObjectGuid m_targetTubberGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_bIsMovementActive  = false;
     }

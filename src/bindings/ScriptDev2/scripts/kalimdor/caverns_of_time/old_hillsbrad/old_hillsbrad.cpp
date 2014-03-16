@@ -262,7 +262,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
     GuidList m_lSkarlocAddsGuids;
     GuidList m_lTarrenMillSoldiersGuids;
 
-    void Reset()
+    void Reset() override
     {
         m_bIsLowHp           = false;
         m_uiStrikeTimer      = urand(3000, 7000);
@@ -847,10 +847,10 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
                 m_creature->SetFacingTo(1.0f);
                 break;
             case 93:
-                m_creature->SummonCreature(NPC_CHURCH_PROTECTOR, 2627.88f, 657.63f, 55.98f, 4.28f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5000);
-                m_creature->SummonCreature(NPC_CHURCH_LOOKOUT,   2627.27f, 655.17f, 56.03f, 4.50f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5000);
-                m_creature->SummonCreature(NPC_CHURCH_LOOKOUT,   2629.21f, 654.81f, 56.04f, 4.38f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5000);
-                m_creature->SummonCreature(NPC_CHURCH_GUARDSMAN, 2629.98f, 656.96f, 55.96f, 4.34f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_CHURCH_PROTECTOR, 2627.88f, 657.63f, 55.98f, 4.28f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_CHURCH_LOOKOUT,   2627.27f, 655.17f, 56.03f, 4.50f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_CHURCH_LOOKOUT,   2629.21f, 654.81f, 56.04f, 4.38f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_CHURCH_GUARDSMAN, 2629.98f, 656.96f, 55.96f, 4.34f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 5000);
                 break;
             case 94:
                 DoScriptText(SAY_TH_CHURCH_END, m_creature);
@@ -1170,7 +1170,7 @@ struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI, private DialogueHelp
 
     bool m_bHasStartedEpilogue;
 
-    void Reset()
+    void Reset() override
     {
         m_bHasStartedEpilogue = false;
     }

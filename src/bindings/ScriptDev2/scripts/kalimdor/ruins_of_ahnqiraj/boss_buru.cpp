@@ -60,7 +60,7 @@ struct MANGOS_DLL_DECL boss_buruAI : public ScriptedAI
     uint32 m_uiGatheringSpeedTimer;
     uint32 m_uiFullSpeedTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDismemberTimer      = 5000;
         m_uiGatheringSpeedTimer = 9000;
@@ -183,7 +183,7 @@ struct MANGOS_DLL_DECL npc_buru_eggAI : public Scripted_NoMovementAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset()
+    void Reset() override
     { }
 
     void JustSummoned(Creature* pSummoned) override

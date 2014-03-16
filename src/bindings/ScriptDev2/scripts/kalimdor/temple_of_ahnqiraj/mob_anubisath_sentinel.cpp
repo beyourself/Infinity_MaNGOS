@@ -55,7 +55,7 @@ struct MANGOS_DLL_DECL npc_anubisath_sentinelAI : public ScriptedAI
 
     GuidList m_lAssistList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMyAbility = 0;
         m_bEnraged = false;

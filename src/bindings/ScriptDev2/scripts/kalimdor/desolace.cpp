@@ -264,11 +264,6 @@ static const LOCATION aMarauderSpawn[]=
     { -1306.730f, 2675.163f, 111.561f},
 };
 
-static const LOCATION aWranglerSpawn[]= 
-{
-    {-1393.194f, 2429.465f, 88.689f},
-};
-
 struct MANGOS_DLL_DECL npc_melizza_brimbuzzleAI : public npc_escortAI, private DialogueHelper
 {
     npc_melizza_brimbuzzleAI(Creature* m_creature) : npc_escortAI(m_creature),
@@ -277,7 +272,7 @@ struct MANGOS_DLL_DECL npc_melizza_brimbuzzleAI : public npc_escortAI, private D
         Reset();
     }
 
-    void Reset() {}
+    void Reset() override {}
 
     void JustStartedEscort() override
     {

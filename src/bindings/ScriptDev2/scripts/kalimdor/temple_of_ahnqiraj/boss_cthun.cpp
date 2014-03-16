@@ -119,7 +119,7 @@ struct MANGOS_DLL_DECL boss_eye_of_cthunAI : public Scripted_NoMovementAI
 
     GuidList m_lEyeTentaclesList;
 
-    void Reset()
+    void Reset() override
     {
         m_Phase                 = PHASE_EYE_NORMAL;
 
@@ -358,7 +358,7 @@ struct MANGOS_DLL_DECL boss_cthunAI : public Scripted_NoMovementAI
 
     ObjectGuid m_stomachEnterTargetGuid;
 
-    void Reset()
+    void Reset() override
     {
         // Phase information
         m_Phase                     = PHASE_TRANSITION;
@@ -688,7 +688,7 @@ struct MANGOS_DLL_DECL npc_giant_claw_tentacleAI : public Scripted_NoMovementAI
     uint32 m_uiHamstringTimer;
     uint32 m_uiDistCheckTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiHamstringTimer  = 2000;
         m_uiThrashTimer     = 5000;

@@ -58,7 +58,7 @@ struct MANGOS_DLL_DECL boss_sarturaAI : public ScriptedAI
 
     bool m_bIsEnraged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWhirlWindTimer = 30000;
         m_uiWhirlWindRandomTimer = urand(3000, 7000);
@@ -202,7 +202,7 @@ struct MANGOS_DLL_DECL mob_sartura_royal_guardAI : public ScriptedAI
     uint32 m_uiAggroResetEndTimer;
     uint32 m_uiKnockBackTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWhirlWindTimer = 30000;
         m_uiWhirlWindRandomTimer = urand(3000, 7000);

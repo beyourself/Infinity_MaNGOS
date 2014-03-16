@@ -68,7 +68,7 @@ struct MANGOS_DLL_DECL mob_anubisath_guardianAI : public ScriptedAI
 
     bool m_bIsEnraged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSpell1 = urand(0, 1) ? SPELL_METEOR : SPELL_PLAGUE;
         m_uiSpell2 = urand(0, 1) ? SPELL_SHADOW_STORM : SPELL_THUNDER_CLAP;

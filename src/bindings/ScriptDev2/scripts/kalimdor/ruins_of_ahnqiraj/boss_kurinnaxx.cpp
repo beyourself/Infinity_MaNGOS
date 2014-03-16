@@ -48,7 +48,7 @@ struct MANGOS_DLL_DECL boss_kurinnaxxAI : public ScriptedAI
 
     ObjectGuid m_sandtrapGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_bEnraged = false;
 

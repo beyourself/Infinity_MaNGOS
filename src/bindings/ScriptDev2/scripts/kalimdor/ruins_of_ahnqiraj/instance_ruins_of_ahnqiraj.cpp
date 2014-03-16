@@ -109,11 +109,6 @@ void instance_ruins_of_ahnqiraj::OnCreatureEvade(Creature* pCreature)
 
 void instance_ruins_of_ahnqiraj::OnCreatureDeath(Creature* pCreature)
 {
-    if (!pCreature)
-        return;
-
-    ObjectGuid guid = pCreature->GetObjectGuid();
-
     switch (pCreature->GetEntry())
     {
         case NPC_KURINNAXX: SetData(TYPE_KURINNAXX, DONE); break;
@@ -134,29 +129,19 @@ void instance_ruins_of_ahnqiraj::OnCreatureDeath(Creature* pCreature)
         {
             // If event isn't started by Andorov, return
             if (GetData(TYPE_RAJAXX) != IN_PROGRESS)
-                break;
+                return;
 
-            bool startNext = false;
+            // Check if the dead creature belongs to the current wave
+            if (m_sArmyWavesGuids[m_uiCurrentArmyWave - 1].find(pCreature->GetObjectGuid()) != m_sArmyWavesGuids[m_uiCurrentArmyWave - 1].end())
             {
-                MAPLOCK_WRITE(pCreature, MAP_LOCK_TYPE_DEFAULT);
-                GuidSet& army = m_sArmyWavesGuids[m_uiCurrentArmyWave - 1];
+                m_sArmyWavesGuids[m_uiCurrentArmyWave - 1].erase(pCreature->GetObjectGuid());
 
-                if (army.empty() || army.find(guid) == army.end())
-                    break;
-
-                // Check if the dead creature belongs to the current wave
-                army.erase(guid);
-                startNext = army.empty();
+                // If all the soldiers from the current wave are dead, then send the next one
+                if (m_sArmyWavesGuids[m_uiCurrentArmyWave - 1].empty())
+                    DoSendNextArmyWave();
             }
-
-            // If all the soldiers from the current wave are dead, then send the next one
-            if (startNext)
-                DoSendNextArmyWave();
-
             break;
         }
-        default:
-            break;
     }
 }
 
@@ -327,18 +312,9 @@ void instance_ruins_of_ahnqiraj::DoSendNextArmyWave()
             ++m_uiCurrentArmyWave;
 
         float fX, fY, fZ;
-
-        // make copy of current guidSet - may be modified in another thread
-        GuidSet currentWave = m_sArmyWavesGuids[m_uiCurrentArmyWave];
-
-        for (GuidSet::const_iterator itr = currentWave.begin(); itr != currentWave.end(); ++itr)
+        for (GuidSet::const_iterator itr = m_sArmyWavesGuids[m_uiCurrentArmyWave].begin(); itr != m_sArmyWavesGuids[m_uiCurrentArmyWave].end(); ++itr)
         {
-            ObjectGuid guid = *itr;
-
-            if (guid.IsEmpty())
-                continue;
-
-            if (Creature* pTemp = instance->GetCreature(guid))
+            if (Creature* pTemp = instance->GetCreature(*itr))
             {
                 if (!pTemp->isAlive())
                     continue;

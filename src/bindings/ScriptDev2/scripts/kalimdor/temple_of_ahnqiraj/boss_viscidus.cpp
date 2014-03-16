@@ -66,7 +66,7 @@ struct MANGOS_DLL_DECL boss_viscidusAI : public ScriptedAI
     uint32 m_uiPoisonShockTimer;
     uint32 m_uiPoisonBoltVolleyTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPoisonShockTimer      = urand(7000, 12000);
         m_uiPoisonBoltVolleyTimer = urand(10000, 15000);

@@ -77,7 +77,7 @@ struct MANGOS_DLL_DECL boss_twin_emperorsAI : public ScriptedAI
     uint32 m_uiBugAbilityTimer;
     uint32 m_uiTeleportTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiTeleportTimer   = 35000;
         m_uiBugAbilityTimer = urand(7000, 14000);
@@ -203,7 +203,7 @@ struct MANGOS_DLL_DECL boss_veknilashAI : public boss_twin_emperorsAI
     uint32 m_uiUppercutTimer;
     uint32 m_uiUnbalancingStrikeTimer;
 
-    void Reset()
+    void Reset() override
     {
         boss_twin_emperorsAI::Reset();
 
@@ -312,7 +312,7 @@ struct MANGOS_DLL_DECL boss_veklorAI : public boss_twin_emperorsAI
     uint32 m_uiBlizzardTimer;
     uint32 m_uiArcaneBurstTimer;
 
-    void Reset()
+    void Reset() override
     {
         boss_twin_emperorsAI::Reset();
 

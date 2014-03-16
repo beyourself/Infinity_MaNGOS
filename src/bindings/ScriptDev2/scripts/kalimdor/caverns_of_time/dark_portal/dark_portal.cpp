@@ -50,7 +50,7 @@ struct MANGOS_DLL_DECL npc_medivh_black_morassAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset() { }
+    void Reset() override { }
 
     void AttackStart(Unit* /*pWho*/) override { }
 
@@ -152,7 +152,7 @@ struct MANGOS_DLL_DECL npc_time_riftAI : public ScriptedAI
     uint8 m_uiRiftNumber;
     uint8 m_uiRiftWaveId;
 
-    void Reset()
+    void Reset() override
     {
         DoCastSpellIfCan(m_creature, SPELL_RIFT_PERIODIC);
 
@@ -296,6 +296,23 @@ struct MANGOS_DLL_DECL npc_time_riftAI : public ScriptedAI
                 // No need to set the data to DONE if there is a new portal spawned already
                 if (m_pInstance && m_uiRiftNumber == m_pInstance->GetCurrentRiftId())
                     m_pInstance->SetData(TYPE_TIME_RIFT, DONE);
+                break;
+        }
+    }
+
+    void SummonedCreatureDespawn(Creature* pSummoned) override
+    {
+        switch (pSummoned->GetEntry())
+        {
+            case NPC_AEONUS:
+            case NPC_CHRONO_LORD_DEJA:
+            case NPC_TEMPORUS:
+            case NPC_CHRONO_LORD:
+            case NPC_TIMEREAVER:
+            case NPC_RIFT_KEEPER:
+            case NPC_RIFT_LORD:
+                // Despawn in case of event reset
+                m_creature->ForcedDespawn();
                 break;
         }
     }

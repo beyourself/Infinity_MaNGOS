@@ -57,7 +57,7 @@ struct MANGOS_DLL_DECL boss_aeonusAI : public ScriptedAI
     uint32 m_uiFrenzyTimer;
     uint32 m_uiCleaveTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSandBreathTimer = urand(15000, 30000);
         m_uiTimeStopTimer   = urand(10000, 15000);

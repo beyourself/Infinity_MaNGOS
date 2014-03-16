@@ -7,12 +7,9 @@
 
 enum
 {
-    ENCOUNTER_KELRIS            = 0,
-    ENCOUNTER_SHRINE            = 1,
     MAX_ENCOUNTER               = 2,
     MAX_FIRES                   = 4,
     MAX_COUNT_POS               = 3,
-    SUMMONS_COUNT               = 6,
 
     TYPE_KELRIS                 = 1,
     TYPE_SHRINE                 = 2,
@@ -113,7 +110,7 @@ class MANGOS_DLL_DECL instance_blackfathom_deeps : public ScriptedInstance
         uint32 m_uiSpawnMobsTimer[MAX_FIRES];
         uint8 m_uiWaveCounter;
 
-        GuidList m_lWaveMobsGuids[MAX_FIRES];
+        std::list<uint32> m_lWaveMobsGuids[MAX_FIRES];
 };
 
 #endif
