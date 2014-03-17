@@ -200,7 +200,7 @@ struct MANGOS_DLL_DECL mob_xerestraszaAI : public ScriptedAI
                         {
                             Creature* pHalion = pInstance->GetSingleCreatureFromStorage(NPC_HALION_REAL);
                             if (pInstance->GetData(TYPE_BALTHARUS) == DONE &&
-                                pInstance->GetData(TYPE_RAGEFIRE) == DONE &&
+                                pInstance->GetData(TYPE_SAVIANA) == DONE &&
                                 pInstance->GetData(TYPE_XERESTRASZA) == DONE &&
                                 pInstance->GetData(TYPE_ZARITHRIAN) == DONE &&
                                 pInstance->GetData(TYPE_HALION) != DONE)
