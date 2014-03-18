@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "precompiled.h"
 
-void AddSC_boss_lich_king()
+void AddSC_boss_lich_king_hr()
 {
+
 }

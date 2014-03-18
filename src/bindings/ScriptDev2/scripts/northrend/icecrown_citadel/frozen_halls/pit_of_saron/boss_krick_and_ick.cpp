@@ -303,7 +303,7 @@ struct MANGOS_DLL_DECL boss_krickAI : public ScriptedAI
 
     void EnterEvadeMode() override
     {
-        m_creature->RemoveAllAurasOnEvade();
+        m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreatureAddon(true);
