@@ -16,8 +16,8 @@
 
 /* ScriptData
 SDName: boss_scourgelord_tyrannus
-SD%Complete: 80
-SDComment: Icy Blast not fully implemented.
+SD%Complete: 90
+SDComment: Small adjustments may be required
 SDCategory: Pit of Saron
 EndScriptData */
 
@@ -48,7 +48,7 @@ enum
     SPELL_KILLING_ICE                   = 72531,
 
     // Icy blast
-    SPELL_ICY_BLAST_AURA                = 69238,
+    // SPELL_ICY_BLAST_AURA             = 69238,
     NPC_ICY_BLAST                       = 36731,                // handled in eventAI
 };
 
@@ -231,7 +231,7 @@ struct MANGOS_DLL_DECL boss_rimefang_posAI : public ScriptedAI
 
     void EnterEvadeMode() override
     {
-        m_creature->RemoveAllAuras();
+        m_creature->RemoveAllAurasOnEvade();
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreatureAddon(true);
