@@ -16,12 +16,8 @@
 
 /* ScriptData
 SDName: boss_festergut
-SD%Complete: 99%
-SDComment:  by michalpolko with special thanks to:
-            mangosR2 team and all who are supporting us with feedback, testing and fixes
-            TrinityCore for some info about spells IDs
-            everybody whom I forgot to mention here ;)
-
+SD%Complete: 90%
+SDComment:
 SDCategory: Icecrown Citadel
 EndScriptData */
 
@@ -33,8 +29,7 @@ enum
     SPELL_BERSERK               = 47008,
 
     // Gastric Bloat
-    SPELL_GASTRIC_BLOAT         = 72214, // proc aura, ~8 sec cooldown, currently not used
-    SPELL_GASTRIC_BLOAT_TRIG    = 72219,
+    SPELL_GASTRIC_BLOAT         = 72214, // proc aura, ~8 sec cooldown, cooldown for Creature requires implementation in core
 
     // Inhale Blight
     SPELL_INHALE_BLIGHT         = 69165,
@@ -45,15 +40,16 @@ enum
     SPELL_PUNGENT_BLIGHT        = 69195,
 
     // Gaseous Blight
-    // periodic auras spells
     SPELL_GASEUS_BLIGHT_DUMMY   = 69125, // gas is spread into the room on aggro
+    // periodic auras spells
     SPELL_GASEOUS_BLIGHT_1      = 69157,
- // SPELL_GASEOUS_BLIGHT_2      = 69162,
- // SPELL_GASEOUS_BLIGHT_3      = 69164,
+    SPELL_GASEOUS_BLIGHT_2      = 69162,
+    SPELL_GASEOUS_BLIGHT_3      = 69164,
+
     // visual gas dummy auras
- // SPELL_GASEOUS_BLIGHT_DUMMY1 = 69126,
- // SPELL_GASEOUS_BLIGHT_DUMMY2 = 69152,
- // SPELL_GASEOUS_BLIGHT_DUMMY3 = 69154,
+    SPELL_GASEOUS_BLIGHT_DUMMY1 = 69126,
+    SPELL_GASEOUS_BLIGHT_DUMMY2 = 69152,
+    SPELL_GASEOUS_BLIGHT_DUMMY3 = 69154,
 
     // Inoculent
     SPELL_REMOVE_INOCULENT      = 69298,
@@ -63,26 +59,11 @@ enum
 
     // Vile Gas
     SPELL_VILE_GAS_SUMMON       = 72288,
-    SPELL_VILE_GAS_SUMMON_TRIG  = 72287,
-    SPELL_VILE_GAS              = 71307,
- // SPELL_VILE_GAS_TRIGGERED    = 69240,
-
-    // Malleable Goo
-    SPELL_MALLEABLE_GOO_SUMMON  = 72299,
-    SPELL_MALLEABLE_GOO         = 72295,
- // SPELL_MALLEABLE_GOO_VISUAL  = 75845,
-    SPELL_MALLEABLE_GOO_MISSILE = 70852,
-
-    // other
- // NPC_ORANGE_GAS_STALKER      = 36659, // has dummy auras of the orange gas
- // NPC_PUDDLE_STALKER          = 37013, // dummy npc for initial gas flowing from pipes animation
-    NPC_MALLEABLE_GOO           = 38556,
+    SPELL_VILE_GAS              = 71307
 };
 
-// talks
 enum
 {
-    SAY_STINKY_DIES             = -1631081,
     SAY_AGGRO                   = -1631082,
     SAY_BLIGHT                  = -1631083,
     SAY_SPORE                   = -1631084,
@@ -92,74 +73,55 @@ enum
     SAY_SLAY_2                  = -1631088,
     SAY_BERSERK                 = -1631089,
     SAY_DEATH                   = -1631090,
+    SAY_FESTERGUT_DEATH         = -1631091,
 };
 
-static LOCATION SpawnLoc[]=
+struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
 {
-    {4322.85f, 3164.17f, 389.40f, 3.76f},               // festergut side
-    {4311.91f, 3157.42f, 389.00f, 3.62f}                // hacky (LoS problems?) festergut side
-};
-
-struct MANGOS_DLL_DECL boss_festergutAI : public base_icc_bossAI
-{
-    boss_festergutAI(Creature* pCreature) : base_icc_bossAI(pCreature)
+    boss_festergutAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = (instance_icecrown_citadel*)pCreature->GetMap()->GetInstanceData();
         Reset();
     }
+
+    instance_icecrown_citadel* m_pInstance;
 
     uint32 m_uiBerserkTimer;
     uint32 m_uiGastricBloatTimer;
     uint32 m_uiInhaleBlightTimer;
     uint32 m_uiGasSporeTimer;
     uint32 m_uiVileGasTimer;
-    uint32 m_uiMalleableGooTimer;
 
     void Reset() override
     {
-        m_uiBerserkTimer      = 5 * MINUTE * IN_MILLISECONDS;
+        m_uiBerserkTimer = 5 * MINUTE * IN_MILLISECONDS;
         m_uiGastricBloatTimer = 10000;
         m_uiInhaleBlightTimer = 30000;
-        m_uiGasSporeTimer     = 20000;
-        m_uiVileGasTimer      = 10000;
-        m_uiMalleableGooTimer = urand(15000, 20000);
+        m_uiGasSporeTimer = 20000;
+        m_uiVileGasTimer = 10000;
     }
 
     void Aggro(Unit* /*pWho*/) override
     {
-        // not working as intended currently
-        // DoCastSpellIfCan(m_creature, SPELL_GASTRIC_BLOAT, CAST_TRIGGERED);
-
-        DoCastSpellIfCan(m_creature, SPELL_GASEOUS_BLIGHT_1, CAST_TRIGGERED);
-        DoCastSpellIfCan(m_creature, SPELL_GASEUS_BLIGHT_DUMMY, CAST_TRIGGERED);
-
         DoScriptText(SAY_AGGRO, m_creature);
 
-        if (m_pInstance)
-        {
-            m_pInstance->SetData(TYPE_FESTERGUT, IN_PROGRESS);
+        DoCastSpellIfCan(m_creature, SPELL_GASTRIC_BLOAT, CAST_TRIGGERED); // not working as intended currently
+        DoCastSpellIfCan(m_creature, SPELL_GASEOUS_BLIGHT_1, CAST_TRIGGERED); // DoT aura
+        DoCastSpellIfCan(m_creature, SPELL_GASEUS_BLIGHT_DUMMY, CAST_TRIGGERED); // visual cast on dummy npc
 
-            if (Creature* pProfessor = m_pInstance->GetSingleCreatureFromStorage(NPC_PROFESSOR_PUTRICIDE))
-            {
-                pProfessor->NearTeleportTo(SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, SpawnLoc[1].o);
-                pProfessor->SetInCombatWithZone();
-            }
-        }
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_FESTERGUT, IN_PROGRESS);
     }
 
     void KilledUnit(Unit* /*pVictim*/) override
     {
-        DoScriptText(SAY_SLAY_1 - urand(0, 1), m_creature);
+        DoScriptText(urand(0, 1) ? SAY_SLAY_1 : SAY_SLAY_2, m_creature);
     }
 
     void JustReachedHome() override
     {
         if (m_pInstance)
-        {
             m_pInstance->SetData(TYPE_FESTERGUT, FAIL);
-
-            if (Creature* pProfessor = m_pInstance->GetSingleCreatureFromStorage(NPC_PROFESSOR_PUTRICIDE))
-                pProfessor->AI()->EnterEvadeMode();
-        }
 
         DoCastSpellIfCan(m_creature, SPELL_REMOVE_INOCULENT, CAST_TRIGGERED);
     }
@@ -167,12 +129,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public base_icc_bossAI
     void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
-        {
             m_pInstance->SetData(TYPE_FESTERGUT, DONE);
-
-            if (Creature* pProfessor = m_pInstance->GetSingleCreatureFromStorage(NPC_PROFESSOR_PUTRICIDE))
-                pProfessor->AI()->EnterEvadeMode();
-        }
 
         DoScriptText(SAY_DEATH, m_creature);
         DoCastSpellIfCan(m_creature, SPELL_REMOVE_INOCULENT, CAST_TRIGGERED);
@@ -195,39 +152,25 @@ struct MANGOS_DLL_DECL boss_festergutAI : public base_icc_bossAI
         else
             m_uiBerserkTimer -= uiDiff;
 
-        // Gastric Bloat
-        if (m_uiGastricBloatTimer <= uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_GASTRIC_BLOAT_TRIG) == CAST_OK)
-                m_uiGastricBloatTimer = 10000;
-        }
-        else
-            m_uiGastricBloatTimer -= uiDiff;
-
-        // Inhale Blight, Pungent Blight
+        // Inhale Blight and Pungent Blight
         if (m_uiInhaleBlightTimer <= uiDiff)
         {
-            // check for Pungent Blight
             SpellAuraHolderPtr holder = m_creature->GetSpellAuraHolder(SPELL_INHALED_BLIGHT_10);
+
             if (!holder)
                 holder = m_creature->GetSpellAuraHolder(SPELL_INHALED_BLIGHT_25);
-            if (holder)
-            {
-                if (holder->GetStackAmount() >= 3)
-                {
-                    // can't inhale anymore...
-                    if (DoCastSpellIfCan(m_creature, SPELL_PUNGENT_BLIGHT) == CAST_OK)
-                    {
-                        DoScriptText(SAY_PUNGUENT_BLIGHT_EMOTE, m_creature);
-                        DoScriptText(SAY_PUNGUENT_BLIGHT, m_creature);
-                        m_uiInhaleBlightTimer = 35000;
-                    }
 
-                    return;
+            // inhale the gas or if already have 3 stacks - release it
+            if (holder && holder->GetStackAmount() >= 3)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_PUNGENT_BLIGHT) == CAST_OK)
+                {
+                    DoScriptText(SAY_PUNGUENT_BLIGHT_EMOTE, m_creature);
+                    DoScriptText(SAY_PUNGUENT_BLIGHT, m_creature);
+                    m_uiInhaleBlightTimer = 35000;
                 }
             }
-
-            if (DoCastSpellIfCan(m_creature, SPELL_INHALE_BLIGHT) == CAST_OK)
+            else if (DoCastSpellIfCan(m_creature, SPELL_INHALE_BLIGHT) == CAST_OK)
             {
                 if (m_pInstance)
                 {
@@ -247,10 +190,6 @@ struct MANGOS_DLL_DECL boss_festergutAI : public base_icc_bossAI
             {
                 DoScriptText(SAY_SPORE, m_creature);
                 m_uiGasSporeTimer = 40000;
-                
-                // make sure Vile Gas is not cast when players are gathered near Gas Spore
-                if (m_uiVileGasTimer < 12000)
-                    m_uiVileGasTimer = 12000;
             }
         }
         else
@@ -259,44 +198,14 @@ struct MANGOS_DLL_DECL boss_festergutAI : public base_icc_bossAI
         // Vile Gas
         if (m_uiVileGasTimer <= uiDiff)
         {
-            // DoCastSpellIfCan(m_creature, SPELL_VILE_GAS_SUMMON, CAST_TRIGGERED);
-            // DoCastSpellIfCan(m_creature, SPELL_VILE_GAS, CAST_TRIGGERED);
-
-            if (Unit* pTarget = SelectRandomRangedTarget(m_creature))
+            if (DoCastSpellIfCan(m_creature, SPELL_VILE_GAS_SUMMON, CAST_TRIGGERED) == CAST_OK)
             {
-                pTarget->CastSpell(pTarget, SPELL_VILE_GAS_SUMMON_TRIG, true);
-                DoCastSpellIfCan(m_creature, SPELL_VILE_GAS, CAST_TRIGGERED);
-                m_uiVileGasTimer = 30000;
+                if (DoCastSpellIfCan(m_creature, SPELL_VILE_GAS) == CAST_OK)
+                    m_uiVileGasTimer = 30000;
             }
         }
         else
             m_uiVileGasTimer -= uiDiff;
-
-        // Malleable Goo
-        if (m_bIsHeroic)
-        {
-            if (m_uiMalleableGooTimer <= uiDiff)
-            {
-                if (Creature* pProfessor = m_pInstance->GetSingleCreatureFromStorage(NPC_PROFESSOR_PUTRICIDE))
-                {
-                    if (Unit* pTarget = SelectRandomRangedTarget(m_creature))
-                    {
-                        // pProfessor->CastSpell(m_creature, SPELL_MALLEABLE_GOO_SUMMON, true);
-                        // pProfessor->CastSpell(m_creature, SPELL_MALLEABLE_GOO, true);
-
-                        float x, y, z;
-                        pTarget->GetPosition(x, y, z);
-                        if (Creature* pTmp = m_creature->SummonCreature(NPC_MALLEABLE_GOO, x, y, z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 20000))
-                        {
-                            pProfessor->CastSpell(pTmp, SPELL_MALLEABLE_GOO_MISSILE, false);
-                            m_uiMalleableGooTimer = urand(15000, 20000);
-                        }
-                    }
-                }
-            }
-            else
-                m_uiMalleableGooTimer -= uiDiff;
-        }
 
         DoMeleeAttackIfReady();
     }
@@ -307,38 +216,12 @@ CreatureAI* GetAI_boss_festergut(Creature* pCreature)
     return new boss_festergutAI(pCreature);
 }
 
-struct MANGOS_DLL_DECL mob_vile_gas_malleable_gooAI : public ScriptedAI
-{
-    mob_vile_gas_malleable_gooAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        SetCombatMovement(false);
-    }
-
-    void DamageTaken(Unit* /*pDealer*/, uint32& uiDamage) override
-    {
-        uiDamage = 0;
-    }
-
-    void Reset() override {}
-    void AttackStart(Unit* /*pWho*/) override {}
-    void UpdateAI(const uint32 /*uiDiff*/) override {}
-};
-
-CreatureAI* GetAI_mob_vile_gas_malleable_goo(Creature* pCreature)
-{
-    return new mob_vile_gas_malleable_gooAI(pCreature);
-}
-
 void AddSC_boss_festergut()
 {
     Script* pNewScript;
+
     pNewScript = new Script;
     pNewScript->Name = "boss_festergut";
     pNewScript->GetAI = &GetAI_boss_festergut;
-    pNewScript->RegisterSelf();
-
-    pNewScript = new Script;
-    pNewScript->Name = "mob_vile_gas_malleable_goo";
-    pNewScript->GetAI = &GetAI_mob_vile_gas_malleable_goo;
     pNewScript->RegisterSelf();
 }
