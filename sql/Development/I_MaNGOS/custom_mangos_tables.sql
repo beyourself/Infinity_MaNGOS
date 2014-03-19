@@ -10,7 +10,7 @@ CREATE TABLE `spell_disabled` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Disabled Spell System';
 
 -- Implement creature spells storage
--- DROP TABLE IF EXISTS `creature_spell`;
+DROP TABLE IF EXISTS `creature_spell`;
 CREATE TABLE IF NOT EXISTS `creature_spell` (
     `guid`      int(11) unsigned NOT NULL COMMENT 'Unique entry from creature_template',
     `spell`     int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell id from DBC',
