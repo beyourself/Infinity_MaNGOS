@@ -39,15 +39,15 @@ INSERT INTO npc_spellclick_spells (`npc_entry`, `spell_id`, `quest_start`, `ques
 (33067, 65031, 0, 0, 0, 1);  -- Siege engine turret
 
 -- Salvaged Chopper
-UPDATE `creature_template` SET PowerType = 3, `AIName` = 'NullAI' WHERE `entry` IN (33062, 34045);
+UPDATE `creature_template` SET PowerType = 3 WHERE `entry` IN (33062, 34045);
 
 -- Siege engine
-UPDATE `creature_template` SET `PowerType` = 3, `AIName` = 'NullAI' WHERE `entry` IN (33060);
+UPDATE `creature_template` SET `PowerType` = 3 WHERE `entry` IN (33060);
 REPLACE INTO `creature_template_spells` SET `entry` = 33060, `spell1` = 62345, `spell2` = 62522, `spell3` = 62346;
 UPDATE `creature_template` SET `AIName` = 'NullAI' WHERE `entry` IN (33067);
 
 -- demolisher
-UPDATE `creature_template` SET `PowerType` = 3, `AIName` = 'NullAI' WHERE `entry` IN (33109);
+UPDATE `creature_template` SET `PowerType` = 3 WHERE `entry` IN (33109);
 REPLACE INTO `creature_template_spells` SET `entry` = 33109, `spell1` = 62306, `spell2` = 62490, `spell3` = 62308, `spell4` = 62324;
 
 -- Salvaged Siege Turret by traponinet
