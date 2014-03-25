@@ -2,3 +2,22 @@
 #define __REVISION_NR_H__
  #define REVISION_NR "12562"
 #endif // __REVISION_NR_H__
+
+/*
+#define REVISION_NR "12430"
+#define REVISION_NR "12557"
+#define REVISION_NR "12558"
+#define REVISION_NR "12559"
+#define REVISION_NR "12560"
+#define REVISION_NR "12561"
+#define REVISION_NR "12566"
+#define REVISION_NR "12567"
+#define REVISION_NR "12569"
+#define REVISION_NR "12570"
+#define REVISION_NR "12572"
+#define REVISION_NR "12573"
+#define REVISION_NR "12574"
+#define REVISION_NR "12575"
+#define REVISION_NR "12576"
+#define REVISION_NR "12577"
+*/
