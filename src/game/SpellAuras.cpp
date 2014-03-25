@@ -5893,6 +5893,7 @@ void Aura::HandleAuraModDecreaseSpeed(bool apply, bool Real)
         }
     }
 
+    target->UpdateSpeed(MOVE_WALK, true);
     target->UpdateSpeed(MOVE_RUN, true);
     target->UpdateSpeed(MOVE_SWIM, true);
     target->UpdateSpeed(MOVE_FLIGHT, true);
@@ -5906,6 +5907,7 @@ void Aura::HandleAuraModUseNormalSpeed(bool /*apply*/, bool Real)
 
     Unit *target = GetTarget();
 
+    target->UpdateSpeed(MOVE_WALK, true);
     target->UpdateSpeed(MOVE_RUN, true);
     target->UpdateSpeed(MOVE_SWIM, true);
     target->UpdateSpeed(MOVE_FLIGHT, true);
