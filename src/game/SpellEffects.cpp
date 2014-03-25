@@ -10526,17 +10526,17 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     if (!unitTarget)
                         return;
 
-                    unitTarget->CastSpell(unitTarget, m_spellInfo->CalculateSimpleValue(eff_idx), true);
-                    m_caster->CastSpell(m_caster, 62340, true);
+                    unitTarget->RemoveAurasDueToSpell(62373);
+                    unitTarget->CastSpell(unitTarget, 62382, true);
                     return;
                 }
-                case 62488:                                 // Load into Catapult
+                case 62428:                                 // Load into Catapult
                 {
                     if (!unitTarget)
                         return;
 
-                    unitTarget->RemoveAurasDueToSpell(62373);
-                    unitTarget->CastSpell(unitTarget, 62382, true);
+                    unitTarget->CastSpell(unitTarget, m_spellInfo->CalculateSimpleValue(eff_idx), true);
+                    m_caster->CastSpell(m_caster, 62340, true);
                     return;
                 }
                 case 62488:                                 // Activate Construct
@@ -10548,8 +10548,8 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     unitTarget->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     unitTarget->CastSpell(unitTarget, 64474, true);
 
-                    if (m_caster->getVictim())
-                        ((Creature*)unitTarget)->AI()->AttackStart(m_caster->getVictim());
+                    if (Unit* pVictim = m_caster->getVictim())
+                        ((Creature*)unitTarget)->AI()->AttackStart(pVictim);
                     return;
                 }
                 case 62524:                                 // Attuned to Nature 2 Dose Reduction
