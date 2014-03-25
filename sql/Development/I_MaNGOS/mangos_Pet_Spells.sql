@@ -19,20 +19,15 @@ VALUES
 -- Valkyr guardian
 UPDATE `creature_template` SET `minmana` = '6500', `maxmana` = '6500' WHERE `entry` =38391;
 REPLACE INTO `creature_template_spells` SET `entry` = 38391, `spell1` = 71841;
-REPLACE INTO `creature_spell` (`guid`,`spell`,`index`) VALUES (38391, 71841, 0);
 
 -- Mirror Image
 UPDATE `creature_template` SET `speed_walk` = 2.5, `modelid_3` = 11686, `minlevel` = 80, `maxlevel` = 80, `equipment_id` = 0 WHERE `entry` = 31216;
-DELETE FROM `creature_spell` WHERE `guid` IN (31216);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`) VALUES
-(31216, 59637, 0),
-(31216, 59638, 1);
+REPLACE INTO `creature_template_spells` SET `entry` = 31216, `spell1` = 59637;
+REPLACE INTO `creature_template_spells` SET `entry` = 31216, `spell2` = 59638;
 
 -- DK Gargoyle
-DELETE FROM `creature_spell` WHERE `guid` IN (27829);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`) VALUES
-(27829, 51963, 0),
-(27829, 43375, 1);
+REPLACE INTO `creature_template_spells` SET `entry` = 27829, `spell1` = 51963;
+REPLACE INTO `creature_template_spells` SET `entry` = 27829, `spell2` = 43375;
 
 /* Stoneclaw Totem */
 REPLACE INTO creature_spell (guid, spell, `index`, active, disabled, flags) VALUES 

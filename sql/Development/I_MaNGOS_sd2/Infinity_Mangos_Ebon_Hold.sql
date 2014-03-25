@@ -19,9 +19,6 @@ UPDATE `creature_template` SET `ScriptName` = '' WHERE `entry` = 28782;
 UPDATE `creature_template` SET `unit_flags` = 0 WHERE `entry` = 28782;
 UPDATE `creature_template` SET `faction_A` = 2082, `faction_H` = 2082 WHERE `entry` = 28782;
 
-DELETE FROM `creature_spell` WHERE `guid` IN (28782);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`) VALUES
-(28782, 52362, 0);
 DELETE FROM `vehicle_accessory` WHERE  `vehicle_entry`=28782 AND `seat`=0;
 DELETE FROM `creature_template_addon` WHERE (`entry`=28768);
 INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES (28768, 25445, 0, 0, 0, 0, 0, '');
@@ -161,17 +158,6 @@ DELETE FROM `creature_template_addon` WHERE (`entry`=28864);
 INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES (28864, 0, 0, 0, 0, 0, 0, '61453');
 
 -- UPDATE `creature_template` SET `vehicle_id` = 79 WHERE `entry` IN (28833);
-DELETE FROM `creature_spell` WHERE `guid` IN (28833);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(28833, 52435, 0, 0, 0, 0),
-(28833, 52576, 1, 0, 0, 0),
-(28833, 52588, 4, 0, 0, 0);
-
-DELETE FROM `creature_spell` WHERE `guid` IN (28887);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(28887, 52435, 0, 0, 0, 0),
-(28887, 52576, 1, 0, 0, 0),
-(28887, 52588, 4, 0, 0, 0);
 
 UPDATE `creature_template` SET `unit_flags` = 4, `mindmg` = 685, `maxdmg` = 715, `armor` = 3232, `attackpower` = 214 WHERE `entry` = 28833;
 UPDATE `creature_template` SET `minhealth` = 26140, `maxhealth` = 26140, `minmana` = 0, `maxmana` = 0, `unit_flags` = 4, `minlevel` = 55, `maxlevel` = 55, `mindmg` = 685, `maxdmg` = 715, `armor` = 3232, `attackpower` = 214 WHERE `entry` = 28887;

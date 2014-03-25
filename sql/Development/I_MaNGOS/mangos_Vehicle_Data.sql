@@ -52,21 +52,9 @@ REPLACE INTO `creature_template_spells` SET `entry` = 33109, `spell1` = 62306, `
 
 -- Salvaged Siege Turret by traponinet
 UPDATE `creature_template` SET `PowerType` = 3 WHERE `entry` = 33067;
-DELETE FROM `creature_spell` WHERE `guid` IN (33067);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(33067, 62358, 0, 0, 0, 0),
-(33067, 62359, 1, 0, 0, 0),
-(33067, 64677, 2, 0, 0, 0);
 
 -- Salvaged Demolisher Mechanic Seat
 UPDATE `creature_template` SET `PowerType` = 3 WHERE `entry` = 33167;
-DELETE FROM `creature_spell` WHERE `guid` IN (33167);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(33167, 62634, 0, 0, 0, 0),
-(33167, 64979, 1, 0, 0, 0),
-(33167, 62479, 2, 0, 0, 0),
-(33167, 62471, 3, 0, 0, 0),
-(33167, 62428, 5, 0, 0, 0);
 
 -- Flame Leviathan mechanic seat
 DELETE FROM `npc_spellclick_spells` WHERE `npc_entry` IN (33114);
@@ -87,14 +75,6 @@ DELETE FROM creature_template_addon WHERE entry = 32638;
 UPDATE creature_template SET vehicle_id = 312, IconName = 'vehichleCursor' WHERE entry IN (32640, 31857, 31858, 31861, 31862, 32212, 32213);
 
 -- Quests
-DELETE FROM `creature_spell` WHERE `guid` IN (28605, 28606, 28607);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(28605, 52264, 0, 0, 0, 0),
-(28605, 52268, 1, 0, 0, 0),
-(28606, 52264, 0, 0, 0, 0),
-(28606, 52268, 1, 0, 0, 0),
-(28607, 52264, 0, 0, 0, 0),
-(28607, 52268, 1, 0, 0, 0);
 
 -- From Lanc
 -- quest 12953
@@ -185,12 +165,6 @@ INSERT INTO npc_spellclick_spells (`npc_entry`, `spell_id`, `quest_start`, `ques
 -- from lanc
 -- Refurbished Shredder (quest 12050)
 UPDATE `creature_template` SET `vehicle_id` = 300 WHERE `entry` IN (27061);
-DELETE FROM `creature_spell` WHERE `guid` IN (27061);
-INSERT INTO `creature_spell` (`guid`, `spell`, `index`, `active`, `disabled`, `flags`) VALUES
-(27061, 47939, 0, 0, 0, 0),
-(27061, 47921, 1, 0, 0, 0),
-(27061, 47966, 2, 0, 0, 0),
-(27061, 47938, 3, 0, 0, 0);
 
 DELETE FROM npc_spellclick_spells WHERE npc_entry IN (27061);
 INSERT INTO npc_spellclick_spells (`npc_entry`, `spell_id`, `quest_start`, `quest_start_active`, `quest_end`, `cast_flags`) VALUES (27061, 47920, 0, 0, 0, 1);
