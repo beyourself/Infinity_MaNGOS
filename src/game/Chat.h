@@ -345,6 +345,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleModifyPhaseCommand(char* args);
         bool HandleModifyGenderCommand(char* args);
         bool HandleModifyPowerTypeCommand(char* args);
+        bool HandleModifyMirrorCommand(char* args);
 
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
@@ -616,6 +617,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandlePlayerbotCommand(char* args);
         bool HandleQuitCommand(char* args);
         bool HandleShowGearScoreCommand(char* args);
+
+        bool HandleFreezeCommand(char* args);
+        bool HandleUnFreezeCommand(char* args);
+        bool HandleListFreezeCommand(char* args);
 
         bool HandleMmapPathCommand(char* args);
         bool HandleMmapLocCommand(char* args);
