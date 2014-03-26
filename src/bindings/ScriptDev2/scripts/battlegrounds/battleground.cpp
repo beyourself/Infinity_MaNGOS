@@ -111,5 +111,7 @@ void AddSC_battleground()
 
     pNewScript = new Script;
     pNewScript->Name = "npc_spirit_guide";
+    pNewScript->GetAI = &GetAI_npc_spirit_guide;
     pNewScript->pGossipHello = &GossipHello_npc_spirit_guide;
+    pNewScript->RegisterSelf();
 }
