@@ -26,6 +26,14 @@ INSERT INTO `mangos_string` (`entry`, `content_default`, `content_loc1`, `conten
 (1556,' Error in WorldState operations!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (1557,' WorldState settings: %s',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
+-- ---------
+-- pvp token
+-- ---------
+
+DELETE FROM `mangos_string` WHERE `entry`='11050';
+INSERT INTO `mangos_string` 
+VALUES ('11050', 'You have been awarded a token for slaying another player.', null, null, null, null, null, null, null, null); 
+
 -- ---------------------
 -- mangos string mr01129
 -- ---------------------
