@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `character_ticket` (
   `ticket_text` text,
   `response_text` text,
   `ticket_lastchange` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `closed` smallint(6) default NULL,
   PRIMARY KEY  (`ticket_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 

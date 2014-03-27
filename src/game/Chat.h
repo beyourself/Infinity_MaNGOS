@@ -604,7 +604,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMailBoxCommand(char* args);
 
         bool HandleTicketCommand(char* args);
-        bool HandleDelTicketCommand(char* args);
+        bool HandleCloseTicketCommand(char* args);
         bool HandleMaxSkillCommand(char* args);
         bool HandleSetSkillCommand(char* args);
         bool HandleRespawnCommand(char* args);
@@ -649,6 +649,7 @@ class MANGOS_DLL_SPEC ChatHandler
 
         //! Development Commands
         bool HandleSaveAllCommand(char* args);
+        bool HandleIRCpmCommand(char* args);
 
         // ChatSpy
         bool HandleChatSpyResetCommand(char* args);

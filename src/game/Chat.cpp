@@ -857,7 +857,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "mailbox",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMailBoxCommand,             "", NULL },
         { "wchange",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleChangeWeatherCommand,       "", NULL },
         { "ticket",         SEC_GAMEMASTER,     true,  &ChatHandler::HandleTicketCommand,              "", NULL },
-        { "delticket",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleDelTicketCommand,           "", NULL },
+        { "closeticket",    SEC_GAMEMASTER,     true,  &ChatHandler::HandleCloseTicketCommand,         "", NULL },
         { "maxskill",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMaxSkillCommand,            "", NULL },
         { "setskill",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleSetSkillCommand,            "", NULL },
         { "whispers",       SEC_MODERATOR,      false, &ChatHandler::HandleWhispersCommand,            "", NULL },
@@ -886,6 +886,8 @@ ChatCommand* ChatHandler::getCommandTable()
         { "unfreeze",       SEC_ADMINISTRATOR,  true, &ChatHandler::HandleUnFreezeCommand,             "", NULL }, // [Freeze Command]
         { "listfreeze",     SEC_ADMINISTRATOR,  true, &ChatHandler::HandleListFreezeCommand,           "", NULL }, // [Freeze Command]
         { "mirror",         SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyMirrorCommand,        "", NULL }, // [Mirror Command]
+
+        { "ircpm",          SEC_PLAYER,         false, &ChatHandler::HandleIRCpmCommand,               "", NULL },
 
         { NULL,             0,                  false, NULL,                                           "", NULL }
     };
