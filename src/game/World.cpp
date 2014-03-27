@@ -70,6 +70,7 @@
 #include "LFGMgr.h"
 #include "warden/WardenDataStorage.h"
 #include "Language.h"
+#include "mangchat/IRCClient.h"
 
 INSTANTIATE_SINGLETON_1( World );
 
@@ -1629,15 +1630,19 @@ void World::SetInitialWorldSettings()
     static uint32 abtimer = 0;
     abtimer = sConfig.GetIntDefault("AutoBroadcast.Timer", 60000);
 
+   static uint32 autoanc = 1;
+   autoanc = sIRC.autoanc;
+
     m_timers[WUPDATE_WEATHERS].SetInterval(1*MINUTE*IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
     m_timers[WUPDATE_UPTIME].SetInterval(getConfig(CONFIG_UINT32_UPTIME_UPDATE)*MINUTE*IN_MILLISECONDS);
                                                             //Update "uptime" table based on configuration entry in minutes.
-    m_timers[WUPDATE_CORPSES].SetInterval(20*MINUTE*IN_MILLISECONDS);
+    m_timers[WUPDATE_CORPSES].SetInterval(20*MINUTE*IN_MILLISECONDS); // erase corpses every 20 minutes
     m_timers[WUPDATE_DELETECHARS].SetInterval(DAY*IN_MILLISECONDS); // check for chars to delete every day
     m_timers[WUPDATE_AUTOBROADCAST].SetInterval(abtimer);
     m_timers[WUPDATE_WORLDSTATE].SetInterval(1*MINUTE*IN_MILLISECONDS);
     m_timers[WUPDATE_CALENDAR].SetInterval(30*IN_MILLISECONDS);
+    m_timers[WUPDATE_AUTOANC].SetInterval(autoanc*MINUTE*1000); //handles IRC autoannouncements
 
     // for AhBot
     m_timers[WUPDATE_AHBOT].SetInterval(20*IN_MILLISECONDS); // every 20 sec
@@ -1902,6 +1907,12 @@ void World::Update(uint32 diff)
             SendBroadcast();
         }
     }
+
+    if (m_timers[WUPDATE_AUTOANC].Passed())
+    {
+        m_timers[WUPDATE_AUTOANC].Reset();
+        SendRNDBroadcast();
+    }	
 
     /// </ul>
     ///- Move all creatures with "delayed move" and remove and delete all objects with "delayed remove"
@@ -2410,6 +2421,22 @@ void World::SendBroadcast()
 
         sLog.outString("AutoBroadcast: '%s'",msg.c_str());
    }
+}
+
+void World::SendRNDBroadcast()
+{
+    std::string msg;
+    QueryResult *result = WorldDatabase.PQuery("SELECT `message` FROM `IRC_AutoAnnounce` ORDER BY RAND() LIMIT 1");
+    if(!result)
+        return;
+    msg = result->Fetch()[0].GetString();
+    delete result;
+    std::string str = "|cffff0000[Automatic]:|r";
+    str += msg;
+    sWorld.SendWorldText(3000,msg.c_str()); //the number before msg.cstr() is a mangos string. So you can put in your own mangos string with unique id and make your announcement any color or show anyway you want in wow by altering the mangos_string table
+    std::string ircchan = "#";
+    ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+	sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Automatic System Message \00304,08\037/!\\\037\017 %s", "%s", msg.c_str()), true);
 }
 
 void World::InitResultQueue()

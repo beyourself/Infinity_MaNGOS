@@ -84,6 +84,7 @@ enum WorldTimers
     WUPDATE_AUTOBROADCAST = 7,
     WUPDATE_WORLDSTATE  = 8,
     WUPDATE_CALENDAR    = 9,
+    WUPDATE_AUTOANC     = 10,
     WUPDATE_COUNT
 };
 
@@ -549,6 +550,7 @@ class World
 
         WorldSession* FindSession(uint32 id) const;
         void AddSession(WorldSession *s);
+        void SendRNDBroadcast();
         void SendBroadcast();
         bool RemoveSession(uint32 id);
         /// Get the number of current active sessions
