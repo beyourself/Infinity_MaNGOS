@@ -28,7 +28,7 @@
 #include "../GossipDef.h"
 #include "../Chat.h"
 #include "../Language.h"
-#include "../WaypointMovementGenerator.h"
+#include "../movementGenerators/WaypointMovementGenerator.h"
 #include "../Guild.h"
 #include "../World.h"
 
@@ -1062,7 +1062,7 @@ bool ChatHandler::HandlePlayerbotCommand(char* args)
             return false;
         }
 
-        QueryResult *resultsocial = CharacterDatabase.PQuery("SELECT COUNT(*) FROM character_social s, characters c WHERE s.guid=c.guid AND c.online = 0 AND flags & 1 AND s.note "_LIKE_" "_CONCAT3_("'%%'","'shared'","'%%'")" AND s.friend = '%u' AND s.guid = '%llu'", m_session->GetPlayer()->GetGUIDLow(), guid.GetRawValue());
+        QueryResult *resultsocial = CharacterDatabase.PQuery("SELECT COUNT(*) FROM character_social s, characters c WHERE s.guid=c.guid AND c.online = 0 AND flags & 1 AND s.note " _LIKE_ " " _CONCAT3_ ("'%%'","'shared'","'%%'")" AND s.friend = '%u' AND s.guid = '%llu'", m_session->GetPlayer()->GetGUIDLow(), guid.GetRawValue());
         if (resultsocial)
         {
             Field *fields = resultsocial->Fetch();
@@ -1138,7 +1138,7 @@ bool ChatHandler::HandlePlayerbotCommand(char* args)
     // end of gmconfig patch
     if (cmdStr == "add" || cmdStr == "login")
     {
-        if (mgr->GetPlayerBot(guid))
+        if (mgr->GetPlayerBot(guid) || sObjectMgr.GetPlayer(guid))
         {
             PSendSysMessage("Bot already exists in world.");
             SetSentErrorMessage(true);

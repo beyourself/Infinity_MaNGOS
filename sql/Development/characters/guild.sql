@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `guild` (
   `BorderStyle` int(5) NOT NULL default '0',
   `BorderColor` int(5) NOT NULL default '0',
   `BackgroundColor` int(5) NOT NULL default '0',
-  `info` text NOT NULL,
+  `info` varchar(500) NOT NULL default '',
   `motd` varchar(255) NOT NULL default '',
   `createdate` bigint(20) unsigned NOT NULL default '0',
   `BankMoney` bigint(20) unsigned NOT NULL default '0',

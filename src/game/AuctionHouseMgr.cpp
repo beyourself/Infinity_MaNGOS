@@ -351,7 +351,7 @@ void AuctionHouseMgr::LoadAuctions()
 
     BarGoLink bar(AuctionCount);
 
-    typedef std::map<uint32, std::wstring> PlayerNames;
+    typedef UNORDERED_MAP<uint32, std::wstring> PlayerNames;
     PlayerNames playerNames;                                // caching for load time
 
     do
@@ -466,7 +466,6 @@ void AuctionHouseMgr::LoadAuctions()
 
 void AuctionHouseMgr::AddAItem(Item* it)
 {
-    WriteGuard guard(i_lock);
     MANGOS_ASSERT(it);
     MANGOS_ASSERT(mAitems.find(it->GetGUIDLow()) == mAitems.end());
     mAitems[it->GetGUIDLow()] = it;
@@ -474,7 +473,6 @@ void AuctionHouseMgr::AddAItem(Item* it)
 
 bool AuctionHouseMgr::RemoveAItem(uint32 id)
 {
-    WriteGuard guard(i_lock);
     ItemMap::iterator i = mAitems.find(id);
     if (i == mAitems.end())
     {
@@ -835,8 +833,20 @@ void WorldSession::BuildListAuctionItems(std::vector<AuctionEntry*> const& aucti
             if (levelmin != 0x00 && (proto->RequiredLevel < levelmin || (levelmax != 0x00 && proto->RequiredLevel > levelmax)))
                 continue;
 
-            if (usable != 0x00 && _player->CanUseItem(item) != EQUIP_ERR_OK)
-                continue;
+            if (usable != 0x00)
+            {
+                if (_player->CanUseItem(item) != EQUIP_ERR_OK)
+                    continue;
+
+                if (proto->Class == ITEM_CLASS_RECIPE)
+                {
+                    if (SpellEntry const* spell = sSpellStore.LookupEntry(proto->Spells[0].SpellId))
+                    {
+                        if (_player->HasSpell(spell->EffectTriggerSpell[EFFECT_INDEX_0]))
+                            continue;
+                    }
+                }
+            }
 
             std::string name = proto->Name1;
             sObjectMgr.GetItemLocaleStrings(proto->ItemId, loc_idx, &name);

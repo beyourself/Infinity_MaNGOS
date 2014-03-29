@@ -329,6 +329,7 @@ INSERT INTO `mangos_string` (`entry`, `content_default`, `content_loc6`, `conten
 (10048,'The Alliance has taken a Spirit Tower!', '¡La Alianza ha tomado una Torre del Espíritu!', '¡La Alianza ha tomado una Torre del Espíritu!', '?????? ???????? ????? ?????!'),
 (10049,'The Horde lost a Spirit Tower!', '¡La Horda ha perdido una Torre del Espíritu!', '¡La Horda ha perdido una Torre del Espíritu!', '???? ???????? ????? ?????!'),
 (10050,'The Alliance lost a Spirit Tower!', '¡La Alianza ha perdido una Torre del Espíritu!', '¡La Alianza ha perdido una Torre del Espíritu!', '?????? ??????? ????? ?????!');
+*/
 
 -- --------
 -- Chat spy
@@ -398,5 +399,14 @@ INSERT INTO mangos_string
 VALUES
    (50007, 'You cannot chat in channel until you are level %u.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
+-- ------------
+-- RFC commands
+-- ------------
+
+DELETE FROM `command` WHERE `name` IN ('character changefaction', 'character changerace');
+
+INSERT INTO `command` (`name`, `security`, `help`) VALUES
+('character changerace', 3,'Syntax: .character changerace [$name]\r\nMark selected in game or by $name in command character for change race at next login.'),
+('character changefaction', 3,'Syntax: .character changefaction [$name]\r\nMark selected in game or by $name in command character for change faction at next login.');
 
 

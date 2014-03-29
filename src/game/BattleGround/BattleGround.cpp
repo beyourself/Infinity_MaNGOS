@@ -34,6 +34,7 @@
 #include "Util.h"
 #include "Formulas.h"
 #include "GridNotifiersImpl.h"
+#include "Chat.h"
 
 namespace MaNGOS
 {
@@ -46,6 +47,9 @@ namespace MaNGOS
             {
                 char const* text = sObjectMgr.GetMangosString(i_textId, loc_idx);
 
+                ObjectGuid sourceGuid = i_source ? i_source ->GetObjectGuid() : ObjectGuid();
+                std::string sourceName = i_source ? i_source ->GetName() : "";
+
                 if (i_args)
                 {
                     // we need copy va_list before use or original va_list will corrupted
@@ -56,26 +60,12 @@ namespace MaNGOS
                     vsnprintf(str, 2048, text, ap);
                     va_end(ap);
 
-                    do_helper(data, &str[0]);
+                    ChatHandler::BuildChatPacket(data, i_msgtype, &str[0], LANG_UNIVERSAL, CHAT_TAG_NONE, sourceGuid, sourceName.c_str());
                 }
                 else
-                    do_helper(data, text);
+                    ChatHandler::BuildChatPacket(data, i_msgtype, text, LANG_UNIVERSAL, CHAT_TAG_NONE, sourceGuid, sourceName.c_str(), sourceGuid, sourceName.c_str());
             }
         private:
-            void do_helper(WorldPacket& data, char const* text)
-            {
-                ObjectGuid targetGuid = i_source ? i_source ->GetObjectGuid() : ObjectGuid();
-
-                data << uint8(i_msgtype);
-                data << uint32(LANG_UNIVERSAL);
-                data << ObjectGuid(targetGuid);             // there 0 for BG messages
-                data << uint32(0);                          // can be chat msg group or something
-                data << ObjectGuid(targetGuid);
-                data << uint32(strlen(text) + 1);
-                data << text;
-                data << uint8(i_source ? i_source->GetChatTag() : uint8(CHAT_TAG_NONE));
-            }
-
             ChatMsg i_msgtype;
             int32 i_textId;
             Player const* i_source;
@@ -130,7 +120,7 @@ namespace MaNGOS
     class BattleGroundYellBuilder
     {
         public:
-            BattleGroundYellBuilder(uint32 language, int32 textId, Creature const* source, va_list* args = NULL)
+            BattleGroundYellBuilder(Language language, int32 textId, Creature const* source, va_list* args = NULL)
                 : i_language(language), i_textId(textId), i_source(source), i_args(args) {}
             void operator()(WorldPacket& data, int32 loc_idx)
             {
@@ -146,28 +136,13 @@ namespace MaNGOS
                     vsnprintf(str, 2048, text, ap);
                     va_end(ap);
 
-                    do_helper(data, &str[0]);
+                    ChatHandler::BuildChatPacket(data, CHAT_MSG_MONSTER_YELL, &str[0], i_language, CHAT_TAG_NONE, i_source->GetObjectGuid(), i_source->GetName());
                 }
                 else
-                    do_helper(data, text);
+                    ChatHandler::BuildChatPacket(data, CHAT_MSG_MONSTER_YELL, text, i_language, CHAT_TAG_NONE, i_source->GetObjectGuid(), i_source->GetName());
             }
         private:
-            void do_helper(WorldPacket& data, char const* text)
-            {
-                // copyied from BuildMonsterChat
-                data << uint8(CHAT_MSG_MONSTER_YELL);
-                data << uint32(i_language);
-                data << ObjectGuid(i_source->GetObjectGuid());
-                data << uint32(0);                          // 2.1.0
-                data << uint32(strlen(i_source->GetName()) + 1);
-                data << i_source->GetName();
-                data << ObjectGuid();                       // Unit Target - isn't important for bgs
-                data << uint32(strlen(text) + 1);
-                data << text;
-                data << uint8(0);                           // ChatTag - for bgs allways 0?
-            }
-
-            uint32 i_language;
+            Language i_language;
             int32 i_textId;
             Creature const* i_source;
             va_list* i_args;
@@ -188,19 +163,16 @@ namespace MaNGOS
                 char str [2048];
                 snprintf(str, 2048, text, arg1str, arg2str);
 
-                ObjectGuid targetGuid = i_source  ? i_source ->GetObjectGuid() : ObjectGuid();
-
-                data << uint8(i_msgtype);
-                data << uint32(LANG_UNIVERSAL);
-                data << ObjectGuid(targetGuid);             // there 0 for BG messages
-                data << uint32(0);                          // can be chat msg group or something
-                data << ObjectGuid(targetGuid);
-                data << uint32(strlen(str) + 1);
-                data << str;
-                data << uint8(i_source ? i_source->GetChatTag() : uint8(CHAT_TAG_NONE));
+                ObjectGuid guid;
+                char const* pName = NULL;
+                if (i_source)
+                {
+                    guid = i_source->GetObjectGuid();
+                    pName = i_source->GetName();
+                }
+                ChatHandler::BuildChatPacket(data, i_msgtype, str, LANG_UNIVERSAL, CHAT_TAG_NONE, ObjectGuid(), NULL, guid, pName);
             }
         private:
-
             ChatMsg i_msgtype;
             int32 i_textId;
             Player const* i_source;
@@ -221,17 +193,8 @@ namespace MaNGOS
 
                 char str [2048];
                 snprintf(str, 2048, text, arg1str, arg2str);
-                // copyied from BuildMonsterChat
-                data << uint8(CHAT_MSG_MONSTER_YELL);
-                data << uint32(i_language);
-                data << ObjectGuid(i_source->GetObjectGuid());
-                data << uint32(0);                          // 2.1.0
-                data << uint32(strlen(i_source->GetName()) + 1);
-                data << i_source->GetName();
-                data << ObjectGuid();                       // Unit Target - isn't important for bgs
-                data << uint32(strlen(str) + 1);
-                data << str;
-                data << uint8(0);                           // ChatTag - for bgs allways 0?
+
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_MONSTER_YELL, str, LANG_UNIVERSAL, CHAT_TAG_NONE, i_source ? i_source ->GetObjectGuid() : ObjectGuid(), i_source ? i_source ->GetName() : "");
             }
         private:
 
@@ -545,7 +508,7 @@ void BattleGround::Update(uint32 diff)
                         WorldPacket status;
                         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(m_TypeID, GetArenaType());
                         uint32 queueSlot = plr->GetBattleGroundQueueIndex(bgQueueTypeId);
-                        sBattleGroundMgr.BuildBattleGroundStatusPacket(&status, this, queueSlot, GetStatus(), 0, GetStartTime(), GetArenaType());
+                        sBattleGroundMgr.BuildBattleGroundStatusPacket(&status, this, queueSlot, GetStatus(), 0, GetStartTime(), GetArenaType(), plr->GetBGTeam());
                         plr->GetSession()->SendPacket(&status);
 
                         plr->RemoveAurasDueToSpell(SPELL_ARENA_PREPARATION);
@@ -906,7 +869,7 @@ void BattleGround::EndBattleGround(Team winner)
 
         if (!plr->isAlive())
         {
-            plr->ResurrectPlayer(1.0f);
+            plr->ResurrectPlayer(100);
             plr->SpawnCorpseBones();
         }
         else
@@ -949,9 +912,9 @@ void BattleGround::EndBattleGround(Team winner)
             }
         }
 
-        uint32 win_kills = plr->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-        uint32 loos_kills = plr->GetRandomWinner() ? BG_REWARD_LOOSER_HONOR_LAST : BG_REWARD_LOOSER_HONOR_FIRST;
-        uint32 win_arena = plr->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
+        uint32 win_kills = plr->IsRandomBGWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
+        uint32 loos_kills = plr->IsRandomBGWinner() ? BG_REWARD_LOOSER_HONOR_LAST : BG_REWARD_LOOSER_HONOR_FIRST;
+        uint32 win_arena = plr->IsRandomBGWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
 
         if (team == winner)
         {
@@ -962,8 +925,8 @@ void BattleGround::EndBattleGround(Team winner)
             {
                 UpdatePlayerScore(plr, SCORE_BONUS_HONOR, GetBonusHonorFromKill(win_kills*4));
                 plr->ModifyArenaPoints(win_arena);
-                if(!plr->GetRandomWinner())
-                    plr->SetRandomWinner(true);
+                if (!plr->IsRandomBGWinner())
+                    plr->SetRandomBGWinner(true);
             }
 
             plr->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_BG, 1);
@@ -983,7 +946,7 @@ void BattleGround::EndBattleGround(Team winner)
         plr->GetSession()->SendPacket(&data);
 
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(GetTypeID(), GetArenaType());
-        sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime(), GetArenaType());
+        sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime(), GetArenaType(), plr->GetBGTeam());
         plr->GetSession()->SendPacket(&data);
         plr->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_BATTLEGROUND, 1);
     }
@@ -1190,7 +1153,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
 
         if (!plr->isAlive())                                // resurrect on exit
         {
-            plr->ResurrectPlayer(1.0f);
+            plr->ResurrectPlayer(100);
             plr->SpawnCorpseBones();
         }
     }
@@ -1231,7 +1194,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             if (SendPacket)
             {
                 WorldPacket data;
-                sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_NONE, 0, 0, ARENA_TYPE_NONE);
+                sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_NONE, 0, 0, ARENA_TYPE_NONE, TEAM_NONE);
                 plr->GetSession()->SendPacket(&data);
             }
 
@@ -1257,6 +1220,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             if (!group->RemoveMember(guid, 0))              // group was disbanded
             {
                 SetBgRaid(team, NULL);
+                group->SetBattlegroundGroup(NULL);
                 delete group;
             }
         }
@@ -1462,7 +1426,7 @@ void BattleGround::AddOrSetPlayerToCorrectBgGroup(Player* plr, ObjectGuid plr_gu
         if (group->IsMember(plr_guid))
         {
             uint8 subgroup = group->GetMemberGroup(plr_guid);
-            plr->SetBattleGroundRaid(group, subgroup);
+            plr->SetBattleGroundRaid(group->GetObjectGuid(), subgroup);
         }
         else
         {
@@ -1481,7 +1445,6 @@ void BattleGround::AddOrSetPlayerToCorrectBgGroup(Player* plr, ObjectGuid plr_gu
 
         if (group->Create(plr_guid, plr->GetName()))
         {
-            sObjectMgr.AddGroup(group);
             SetBgRaid(team, group);
         }
         else
@@ -1927,7 +1890,7 @@ void BattleGround::SendYellToAll(int32 entry, uint32 language, ObjectGuid guid)
     Creature* source = GetBgMap()->GetCreature(guid);
     if (!source)
         return;
-    MaNGOS::BattleGroundYellBuilder bg_builder(language, entry, source);
+    MaNGOS::BattleGroundYellBuilder bg_builder(Language(language), entry, source);
     MaNGOS::LocalizedPacketDo<MaNGOS::BattleGroundYellBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
@@ -2057,7 +2020,7 @@ void BattleGround::PlayerAddedToBGCheckIfBGIsRunning(Player* plr)
     sBattleGroundMgr.BuildPvpLogDataPacket(&data, this);
     plr->GetSession()->SendPacket(&data);
 
-    sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, GetEndTime(), GetStartTime(), GetArenaType());
+    sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, GetEndTime(), GetStartTime(), GetArenaType(), plr->GetBGTeam());
     plr->GetSession()->SendPacket(&data);
 }
 

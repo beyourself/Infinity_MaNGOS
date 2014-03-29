@@ -150,10 +150,13 @@ enum Powers
     POWER_HAPPINESS                     = 4,
     POWER_RUNE                          = 5,
     POWER_RUNIC_POWER                   = 6,
+    POWER_SOUL_SHARDS                   = 7,
+    POWER_ECLIPSE                       = 8,
+    POWER_HOLY_POWER                    = 9,
+    POWER_ALTERNATIVE                   = 10,
+    MAX_POWERS                          = 7,            // in 3.xx client only 7 power types
     POWER_HEALTH                        = 0xFFFFFFFE    // (-2 as signed value)
 };
-
-#define MAX_POWERS                        7
 
 enum EnergyType
 {
@@ -2568,6 +2571,7 @@ enum CorpseDynFlags
 #define SPELL_ID_WEAPON_SWITCH_COOLDOWN_1_0s    6123
 #define SPELL_ID_AUTOSHOT                       75          // used for checks in other spells interruption
 #define SPELL_ID_SHADOWMELD                     58984       // used for check ignore stealth stance state
+#define SPELL_ID_HONORLESS_TARGET               2479
 
 enum WeatherType
 {

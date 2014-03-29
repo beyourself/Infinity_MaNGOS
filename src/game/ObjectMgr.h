@@ -47,6 +47,7 @@ class Group;
 class ArenaTeam;
 class Item;
 class SQLStorage;
+class MOTransport;
 
 struct GameTele
 {
@@ -144,7 +145,7 @@ typedef UNORDERED_MAP<uint32/*(mapid,spawnMode) pair*/,CellObjectGuidsMap> MapOb
 #define MIN_MANGOS_STRING_ID           1                    // 'mangos_string'
 #define MAX_MANGOS_STRING_ID           2000000000
 #define MIN_DB_SCRIPT_STRING_ID        MAX_MANGOS_STRING_ID // 'db_script_string'
-#define MAX_DB_SCRIPT_STRING_ID        2000010000
+#define MAX_DB_SCRIPT_STRING_ID        2001000000
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 // Anything below MAX_CREATURE_AI_TEXT_STRING_ID is handled by the external script lib
@@ -153,12 +154,12 @@ static_assert(MAX_DB_SCRIPT_STRING_ID < ACE_INT32_MAX, "Must scope with int32 ra
 
 struct MangosStringLocale
 {
-    MangosStringLocale() : SoundId(0), Type(0), Language(0), Emote(0) { }
+    MangosStringLocale() : SoundId(0), Type(0), LanguageId(LANG_UNIVERSAL), Emote(0) { }
 
     std::vector<std::string> Content;                       // 0 -> default, i -> i-1 locale index
     uint32 SoundId;
     uint8  Type;
-    uint32 Language;
+    Language LanguageId;
     uint32 Emote;
 };
 
@@ -623,6 +624,9 @@ class ObjectMgr
         void AddGroup(Group* group);
         void RemoveGroup(Group* group);
 
+        GroupMap::iterator GetGroupMapBegin() { return mGroupMap.begin(); }
+        GroupMap::iterator GetGroupMapEnd()   { return mGroupMap.end(); }
+
         ArenaTeam* GetArenaTeamById(uint32 arenateamid) const;
         ArenaTeam* GetArenaTeamByName(const std::string& arenateamname) const;
         ArenaTeam* GetArenaTeamByCaptain(ObjectGuid guid) const;
@@ -853,11 +857,11 @@ class ObjectMgr
 
         void LoadTransports(Map* map);
         void LoadTransports();
-        typedef UNORDERED_SET<Transport*> TransportSet;
+        typedef UNORDERED_SET<MOTransport*> TransportSet;
         TransportSet const& GetTransports() { return m_Transports; };
 
-        Transport* GetTransportByGuid(ObjectGuid const& guid);
-        Transport const* GetTransportByGOMapId(uint32 mapid) const;
+        MOTransport* GetTransportByGuid(ObjectGuid const& guid);
+        MOTransport const* GetTransportByGOMapId(uint32 mapid) const;
 
         std::string GeneratePetName(uint32 entry);
         uint32 GetBaseXP(uint32 level) const;
@@ -1100,14 +1104,14 @@ class ObjectMgr
         GameTele const* GetGameTele(uint32 id) const
         {
             GameTeleMap::const_iterator itr = m_GameTeleMap.find(id);
-            if(itr==m_GameTeleMap.end()) return NULL;
-            return &itr->second;
+            return itr != m_GameTeleMap.end() ? &itr->second : NULL;
         }
 
-        GameTele const* GetGameTele(const std::string& name) const;
+        GameTele const* GetGameTele(std::string const& name) const;
+        GameTele const* GetGameTeleExactName(std::string const& name) const;
         GameTeleMap const& GetGameTeleMap() const { return m_GameTeleMap; }
         bool AddGameTele(GameTele& data);
-        bool DeleteGameTele(const std::string& name);
+        bool DeleteGameTele(std::string const& name);
 
         uint32 GetNpcGossip(uint32 entry) const
         {
