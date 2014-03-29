@@ -1397,20 +1397,20 @@ void IRCCmd::Level_Player(_CDATA *CD)
             WorldPacket data;
             ChatHandler CH(chr->GetSession());
             if (i_oldlvl == i_newlvl)
-                CH.FillSystemMessageData(&data, "Your level progress has been reset.");
+                CH.BuildChatPacket(data, CHAT_MSG_SYSTEM, "Your level progress has been reset.", LANG_UNIVERSAL, CHAT_TAG_NONE);
             else
                 if (i_oldlvl < i_newlvl)
                 {
                     char  temp [32];
                     sprintf(temp, "You have been leveled up (%i)",i_newlvl-i_oldlvl);
-                    CH.FillSystemMessageData(&data, temp);
+                    CH.BuildChatPacket(data, CHAT_MSG_SYSTEM, temp, LANG_UNIVERSAL, CHAT_TAG_NONE);
                 }
                 else
                     if (i_oldlvl > i_newlvl)
                     {
                         char  temp [34];
                         sprintf(temp, "You have been leveled down (%i)",i_newlvl-i_oldlvl);
-                        CH.FillSystemMessageData(&data, temp);
+                        CH.BuildChatPacket(data, CHAT_MSG_SYSTEM, temp, LANG_UNIVERSAL, CHAT_TAG_NONE);
                     }
             chr->GetSession()->SendPacket( &data );
         }
