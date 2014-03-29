@@ -407,6 +407,11 @@ class MANGOS_DLL_SPEC Group
         void BroadcastGroupUpdate(void);
         // Frozen Mod
 
+        // ai playerbot mod
+        ObjectGuid GetTargetIcon(int index) { return m_targetIcons[index]; }
+        TRolls* GetRolls() { return m_rollIds; }
+        // end
+
     protected:
         bool _addMember(ObjectGuid guid, const char* name);
         bool _addMember(ObjectGuid guid, const char* name, uint8 group, GroupFlagMask flags = GROUP_MEMBER, LFGRoleMask roles = LFG_ROLE_MASK_NONE);

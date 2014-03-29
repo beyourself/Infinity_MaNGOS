@@ -71,6 +71,9 @@
 #include "LFGMgr.h"
 #include "warden/WardenDataStorage.h"
 #include "Language.h"
+#include "ahbot/AhBot.h"
+#include "playerbot/PlayerbotAIConfig.h"
+#include "playerbot/RandomPlayerbotMgr.h"
 
 INSTANTIATE_SINGLETON_1( World );
 
@@ -1723,6 +1726,9 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading Warden Data..." );
     WardenDataStorage.Init();
 
+    sLog.outString("Initializing AuctionHouseBot...");
+    auctionbot.Init();
+
     // Delete all characters which have been deleted X days before
     Player::DeleteOldCharacters();
 
@@ -1730,6 +1736,7 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Initialize AuctionHouseBot...");
     sAuctionBot.Initialize();
+    sPlayerbotAIConfig.Initialize();
 
     sLog.outString( "WORLD: World initialized" );
 
@@ -1823,6 +1830,7 @@ void World::Update(uint32 diff)
     /// <ul><li> Handle auctions when the timer has passed
     if (!bSingletonUpdate && m_timers[WUPDATE_AUCTIONS].Passed())
     {
+        auctionbot.Update();
         m_timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
@@ -1845,6 +1853,11 @@ void World::Update(uint32 diff)
         m_timers[WUPDATE_AHBOT].Reset();
         bSingletonUpdate = true;
     }
+
+    // playerbot mod
+    sRandomPlayerbotMgr.UpdateAI(diff);
+    sRandomPlayerbotMgr.UpdateSessions(diff);
+    // end of playerbot mod
 
     /// <li> Handle session updates
     UpdateSessions(diff);
@@ -2319,6 +2332,10 @@ void World::ShutdownServ(uint32 time, uint32 options, uint8 exitcode)
         m_ShutdownTimer = time;
         ShutdownMsg(true);
     }
+
+    // playerbot mod
+    sRandomPlayerbotMgr.LogoutAllBots();
+    // end of playerbot mod
 }
 
 /// Display a shutdown message to the user(s)

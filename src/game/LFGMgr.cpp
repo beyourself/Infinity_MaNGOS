@@ -26,6 +26,7 @@
 #include "World.h"
 #include "Group.h"
 #include "Player.h"
+#include "GameEventMgr.h"
 
 #include <limits>
 
@@ -607,13 +608,6 @@ LFGJoinResult LFGMgr::GetPlayerJoinResult(Player* pPlayer)
         return ERR_LFG_RANDOM_COOLDOWN_PLAYER;
 
     LFGDungeonSet const* dungeons = GetLFGPlayerState(pPlayer->GetObjectGuid())->GetDungeons();
-
-
-    if (pPlayer->GetPlayerbotMgr() || pPlayer->GetPlayerbotAI())
-    {
-        DEBUG_LOG("LFGMgr::GetPlayerJoinResult: %u trying to join to dungeon finder, but has playerbots (or playerbot itself). Aborting.", pPlayer->GetObjectGuid().GetCounter());
-        return ERR_LFG_NO_SLOTS_PLAYER;
-    }
 
     // TODO - Check if all dungeons are valid
 
@@ -2522,6 +2516,11 @@ bool LFGMgr::TryCreateGroup(LFGType type)
         LFGDungeonSet intersection;
         GuidSet newGroup;
         GuidSet const* applicants = &itr->second;
+        // playerbot mod
+        for (int pass = 0; pass < 2; ++pass)
+        {
+        // end of playerbot mod
+
         for (GuidSet::const_iterator itr1 = applicants->begin(); itr1 != applicants->end(); ++itr1)
         {
             ObjectGuid guid = *itr1;
@@ -2545,7 +2544,11 @@ bool LFGMgr::TryCreateGroup(LFGType type)
                 continue;
 
             Player* player1 = sObjectMgr.GetPlayer(guid);
-            if (player1 && player1->IsInWorld())
+            if (player1 && player1->IsInWorld() &&
+                    // playerbot mod
+                    ((!pass && !player1->GetPlayerbotAI()) || pass)
+                    // end of playerbot mod
+                    )
             {
                 rolesMap.insert(std::make_pair(player1->GetObjectGuid(), GetLFGPlayerState(player1->GetObjectGuid())->GetRoles()));
 
@@ -2575,6 +2578,13 @@ bool LFGMgr::TryCreateGroup(LFGType type)
                 break;
             }
         }
+
+        // playerbot mod
+        if (!pass && newGroup.empty())
+            break;
+        }
+        // end of playerbot mod
+
         DEBUG_LOG("LFGMgr:TryCreateGroup: Try create group to dungeon %u from " SIZEFMTD " players. result is %u", itr->first->ID, itr->second.size(), uint8(groupCreated));
         if (groupCreated)
         {
