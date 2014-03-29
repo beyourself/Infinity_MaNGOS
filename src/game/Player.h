@@ -2315,12 +2315,6 @@ class MANGOS_DLL_SPEC Player : public Unit
         // select modelid depending on hair color or skin tone
         uint32 GetModelForForm(SpellShapeshiftFormEntry const* ssEntry) const;
 
-        // wow armory begin
-        void CreateWowarmoryFeed(uint32 type, uint32 data, uint32 item_guid, uint32 item_quality);
-        void InitWowarmoryFeeds();
-        WowarmoryFeeds m_wowarmory_feeds;
-        // wow armory end
-
         /*********************************************************/
         /***                 INSTANCE SYSTEM                   ***/
         /*********************************************************/
