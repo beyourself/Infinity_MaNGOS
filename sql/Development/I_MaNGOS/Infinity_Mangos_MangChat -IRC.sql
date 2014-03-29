@@ -61,23 +61,6 @@ CREATE TABLE `IRC_Inchan` (
 
 SET FOREIGN_KEY_CHECKS=0;
 
-
--- ----------------------------
--- Table structure for IRC_AutoAnnounce
--- ----------------------------
-DROP TABLE IF EXISTS `IRC_AutoAnnounce`;
-CREATE TABLE `IRC_AutoAnnounce` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` longtext NOT NULL,
-  `addedby` varchar(12) NOT NULL default '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='IRC Module System';
-
--- ----------------------------
--- Record addition for IRC_AutoAnnounce
--- ----------------------------
-INSERT INTO mangos_string (`entry`,`content_default`) VALUES ('3000','|cffff0000[Automatic System Message]: %s|r');
-
 -- -----------
 -- Commands --
 -- -----------
