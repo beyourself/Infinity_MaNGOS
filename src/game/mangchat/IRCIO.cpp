@@ -67,7 +67,7 @@ void IRCClient::Handle_IRC(std::string sData)
                 // authenticate ourself.
                 if(CMD == sIRC._ICC)
                 {
-                    // _Auth is defined in mangosd.conf (irc.auth)
+                    // _Auth is defined in world.conf (irc.auth)
                     // 0 do not authenticate
                     // 1 use nickserv
                     // 2 use quakenet

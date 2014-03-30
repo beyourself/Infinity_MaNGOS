@@ -57,10 +57,10 @@
   #else
     #define SD2_FULLVERSION SD2_VERSION " (Win32)"
   #endif
-  #define _SCRIPTDEV2_CONFIG   SYSCONFDIR"scriptdev2.conf"
+  #define _SCRIPTDEV2_CONFIG   SYSCONFDIR"Config/scriptdev2.conf"
 #else
   #define SD2_FULLVERSION SD2_VERSION " (Unix)"
-  #define _SCRIPTDEV2_CONFIG  SYSCONFDIR"scriptdev2.conf"
+  #define _SCRIPTDEV2_CONFIG  SYSCONFDIR"Config/scriptdev2.conf"
 #endif
 
 #if CLIENT_VERSION >= 16057
